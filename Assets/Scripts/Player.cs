@@ -137,7 +137,8 @@ public class Player : MonoBehaviour
         {
             Destroy(this.gameObject);
             _spawnManager.OnPlayerDeath();
-            Instantiate(_explosionVisual, transform.position, Quaternion.identity);
+            GameObject explode = Instantiate(_explosionVisual, transform.position, Quaternion.identity);
+                    Destroy(explode, 2.5f);
         }
     }
 
