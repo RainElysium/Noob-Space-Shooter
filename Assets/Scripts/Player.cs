@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 5f;
     [SerializeField]
+    private float _thrusterMultiplier = 1.25f;
+    [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _tripleShot;
@@ -31,7 +33,6 @@ public class Player : MonoBehaviour
 
     private SpawnManager _spawnManager;
 
-    [SerializeField]
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
 
@@ -61,9 +62,14 @@ public class Player : MonoBehaviour
         CalculateMovement();
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
-        {
             FireLaser();
-        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) // Thrusters engage!
+            _speed *= _thrusterMultiplier;
+
+        if (Input.GetKeyUp(KeyCode.LeftShift)) // Thrusters disengage!
+            _speed /= _thrusterMultiplier;
+
     }
 
     void CalculateMovement()
