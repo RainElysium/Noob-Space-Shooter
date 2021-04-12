@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     private float _canFire;
     private float _fireRate;
 
+    private bool _isAlive = true;
+
     private void Start()
     {
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -36,7 +38,7 @@ public class Enemy : MonoBehaviour
     {
         CalculateMovement();
 
-        if (Time.time > _canFire) // firing
+        if (Time.time > _canFire && _isAlive) // firing
         {
             _fireRate = Random.Range(2f, 5f);
             _canFire = Time.time + _fireRate;
@@ -84,8 +86,6 @@ public class Enemy : MonoBehaviour
 
             case "Laser":
                 {
-                    if (other.tag == "Enemy")
-                        break;
 
                     Destroy(other.gameObject);
                     _audioSource.Play();
@@ -95,8 +95,9 @@ public class Enemy : MonoBehaviour
                     }
 
                     _onEnemyDeath.SetTrigger("OnEnemyDeath");
-                    Destroy(this.gameObject, 2.5f);
+                    Destroy(this.gameObject, 2.8f);
                     Destroy(GetComponent<Collider2D>());
+                    _isAlive = false;
 
                     _speed = 0;
                     break;

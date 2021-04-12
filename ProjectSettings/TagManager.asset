@@ -6,14 +6,11 @@ TagManager:
   tags:
   - Enemy
   - Laser
-  - Powerup
-  - Player_Laser
-  - Enemy_Laser
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Post Processing
+  - 
   - Water
   - UI
   - 
@@ -43,15 +40,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 896013703
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 1016008359
-    locked: 0
   - name: Foreground
-    uniqueID: 626220143
+    uniqueID: 2470980989
     locked: 0
   - name: AbovePlayer
-    uniqueID: 3505632729
+    uniqueID: 564319993
     locked: 0

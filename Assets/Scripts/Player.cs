@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     private SpawnManager _spawnManager;
 
+    [SerializeField]
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
 
@@ -84,14 +85,12 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        GameObject laser;
-
         if (_isTripleShotActive)
         {
             Instantiate(_tripleShot, transform.position, Quaternion.identity);
         }
         else
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.45f, 0), Quaternion.identity);
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.032f, 0), Quaternion.identity);
 
         _canFire = Time.time + _fireRate;
         _audioSource.Play();
