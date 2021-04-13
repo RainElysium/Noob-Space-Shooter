@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour
     {
 
         _scoreText.text = "Score: 0";
-        _AmmoCountText.text = "Laser Charges: 15";
 
         _GameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -44,6 +43,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateLives(int currentLives)
     {
+        if (currentLives >= 0)
         _LivesImg.sprite = _liveSprites[currentLives];
 
         if (currentLives < 1)

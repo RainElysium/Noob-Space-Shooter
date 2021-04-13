@@ -318,7 +318,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262314737}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
@@ -544,6 +544,7 @@ MonoBehaviour:
   - {fileID: 5564824721897737039, guid: 5d2dd65ef6c074147a278621b18aa4f3, type: 3}
   - {fileID: 6550893405052514813, guid: 59124831782661c428f517bba4dae9b6, type: 3}
   - {fileID: 7212031155186332665, guid: 6dc4c52922a72a3429713b2a553b932e, type: 3}
+  - {fileID: 6888885944787789699, guid: 3eb7331bbd4db904da9f7c12f2b3fae8, type: 3}
   _enemyContainer: {fileID: 1626529733}
 --- !u!4 &396740862
 Transform:
@@ -1556,7 +1557,7 @@ MonoBehaviour:
   _shieldVisual:
   - {fileID: 1278841379}
   - {fileID: 259225365}
-  - {fileID: 0}
+  - {fileID: 717860494}
   _fireRate: 0.2
   _lives: 3
   _leftEngine: {fileID: 523501568}

@@ -220,6 +220,28 @@ public class Player : MonoBehaviour
         _ammoCount = 15;
         _uiManager.UpdateAmmo(_ammoCount);
     }
+
+    public void HealthPowerup()
+    {
+        if (_lives < 3 && _lives != 0)
+        {
+            ++_lives;
+
+            if (_leftEngine.activeInHierarchy)
+            {
+                _leftEngine.SetActive(false);
+            }
+            else if (_rightEngine.activeInHierarchy)
+            {
+                _rightEngine.SetActive(false);
+            }
+
+            _uiManager.UpdateLives(_lives);
+
+        }
+
+
+    }
 }
 
 
