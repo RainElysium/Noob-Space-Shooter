@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _scoreText;
     [SerializeField]
+    private Text _AmmoCountText;
+    [SerializeField]
     private Sprite[] _liveSprites;
     [SerializeField]
     private Image _LivesImg;
@@ -23,7 +25,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
 
-        _scoreText.text = "Score: " + 0;
+        _scoreText.text = "Score: 0";
+        _AmmoCountText.text = "Laser Charges: 15";
+
         _GameOver.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
 
@@ -48,13 +52,22 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public void UpdateAmmo(int ammoCount)
+    {
+        if (ammoCount < 1)
+        {
+            _AmmoCountText.text = "WARNING! OUT OF CHARGES!";
+            StartCoroutine(OutOfAmmoRoutine());
+        }
+        else
+            _AmmoCountText.text = "Laser Charges: " + ammoCount; 
+    }
+
     void GameOverSequence()
     {
         StartCoroutine(GameOverFlickerRoutine());
         _RestartR.gameObject.SetActive(true);
         _gameManager.GameOver();
-
-
     }
 
     IEnumerator GameOverFlickerRoutine()
@@ -64,6 +77,17 @@ public class UIManager : MonoBehaviour
             _GameOver.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.5f);
             _GameOver.gameObject.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    IEnumerator OutOfAmmoRoutine()
+    {
+        while (true)
+        {
+            _AmmoCountText.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            _AmmoCountText.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.5f);
         }
     }

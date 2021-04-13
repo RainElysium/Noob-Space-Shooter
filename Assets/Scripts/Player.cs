@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioClip _laserSoundClip;
     [SerializeField]
+    private AudioClip _outOfAmmoClip;
+    [SerializeField]
     private GameObject _explosionVisual;
 
 
@@ -36,6 +38,7 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
     private int _shieldCharges = 3;
+    private int _ammoCount = 15;
 
     private UIManager _uiManager;
     private int _score;
@@ -92,6 +95,13 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
+        if (_ammoCount < 1)
+        {
+            _audioSource.clip = _outOfAmmoClip;
+            _audioSource.Play();
+            return;
+        }
+
         if (_isTripleShotActive)
         {
             Instantiate(_tripleShot, transform.position, Quaternion.identity);
@@ -101,6 +111,10 @@ public class Player : MonoBehaviour
 
         _canFire = Time.time + _fireRate;
         _audioSource.Play();
+        --_ammoCount;
+        _uiManager.UpdateAmmo(_ammoCount);
+
+
     }
 
     public void Damage()
@@ -195,6 +209,7 @@ public class Player : MonoBehaviour
     public void ShieldBoostActive()
     {
         _shieldVisual[2].SetActive(true);
+        _shieldCharges = 3;
         _isShieldActive = true;
     }
 
