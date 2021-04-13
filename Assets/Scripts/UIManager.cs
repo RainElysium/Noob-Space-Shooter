@@ -18,8 +18,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     public Text _RestartR;
     public int _score;
-
     private GameManager _gameManager;
+    private bool _stopAmmoFlash = false;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
 
         if (!_gameManager)
             Debug.LogError("GameManager is NULL.");
+
     }
 
     // Update is called once per frame
@@ -57,10 +58,14 @@ public class UIManager : MonoBehaviour
         if (ammoCount < 1)
         {
             _AmmoCountText.text = "WARNING! OUT OF CHARGES!";
+            _stopAmmoFlash = false;
             StartCoroutine(OutOfAmmoRoutine());
         }
         else
-            _AmmoCountText.text = "Laser Charges: " + ammoCount; 
+        {
+            _AmmoCountText.text = "Laser Charges: " + ammoCount;
+            _stopAmmoFlash = true;
+        }
     }
 
     void GameOverSequence()
@@ -85,10 +90,17 @@ public class UIManager : MonoBehaviour
     {
         while (true)
         {
-            _AmmoCountText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(0.5f);
-            _AmmoCountText.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.5f);
+           _AmmoCountText.gameObject.SetActive(true);
+           yield return new WaitForSeconds(0.5f);
+           _AmmoCountText.gameObject.SetActive(false);
+           yield return new WaitForSeconds(0.5f);
+           
+           if (_stopAmmoFlash)
+            {
+                _AmmoCountText.gameObject.SetActive(true);
+                StopCoroutine(OutOfAmmoRoutine());
+                break;
+            }
         }
     }
 

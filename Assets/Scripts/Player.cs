@@ -28,9 +28,6 @@ public class Player : MonoBehaviour
     private AudioClip _outOfAmmoClip;
     [SerializeField]
     private GameObject _explosionVisual;
-
-
-
     private AudioSource _audioSource;
 
     private SpawnManager _spawnManager;
@@ -53,8 +50,6 @@ public class Player : MonoBehaviour
 
         if (!_audioSource)
             Debug.LogError("Audiosource in Player is NULL");
-        else
-            _audioSource.clip = _laserSoundClip;
 
         if (!_spawnManager)
             Debug.LogError("Spawn Manager is NULL");
@@ -110,6 +105,7 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.032f, 0), Quaternion.identity);
 
         _canFire = Time.time + _fireRate;
+        _audioSource.clip = _laserSoundClip;
         _audioSource.Play();
         --_ammoCount;
         _uiManager.UpdateAmmo(_ammoCount);
@@ -217,6 +213,12 @@ public class Player : MonoBehaviour
     {
         _score += 10;
         _uiManager.UpdateScore(_score);
+    }
+
+    public void AmmoPowerup()
+    {
+        _ammoCount = 15;
+        _uiManager.UpdateAmmo(_ammoCount);
     }
 }
 
