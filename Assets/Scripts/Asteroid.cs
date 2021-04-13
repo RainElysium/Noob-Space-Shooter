@@ -26,7 +26,7 @@ public class Asteroid : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "Laser":
+            case "Player_Laser":
                 {
                     GameObject explode = Instantiate(_explosionVisual, transform.position, Quaternion.identity);
                     Destroy(explode, 2.5f);

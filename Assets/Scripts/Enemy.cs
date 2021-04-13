@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
                     break;
                 }
 
-            case "Laser":
+            case "Player_Laser":
                 {
 
                     Destroy(other.gameObject);
