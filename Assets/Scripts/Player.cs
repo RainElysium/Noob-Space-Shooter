@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShot;
     [SerializeField]
-    private GameObject _shieldVisual;
+    private GameObject[] _shieldVisual;
     [SerializeField]
     private float _fireRate = 0.2f;
     [SerializeField]
@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
 
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
+    private int _shieldCharges = 3;
 
     private UIManager _uiManager;
     private int _score;
@@ -106,8 +107,27 @@ public class Player : MonoBehaviour
     {
         if (_isShieldActive)
         {
-            _isShieldActive = false;
-            _shieldVisual.SetActive(false);
+            --_shieldCharges;
+
+            switch (_shieldCharges)
+            {
+                case 3:
+                    _shieldVisual[2].SetActive(true);
+                    break;
+                case 2:
+                    _shieldVisual[2].SetActive(false);
+                    _shieldVisual[1].SetActive(true);
+                    break;
+                case 1:
+                    _shieldVisual[1].SetActive(false);
+                    _shieldVisual[0].SetActive(true);
+                    break;
+                case 0:
+                    _shieldVisual[0].SetActive(false);
+                    _isShieldActive = false;
+                    _shieldCharges = 3;
+                    break;
+            }
             return;
         }
 
@@ -116,14 +136,14 @@ public class Player : MonoBehaviour
         switch (random)
         {
             case 1:
-                    if (!_leftEngine.activeInHierarchy)
-                    {
-                        _leftEngine.SetActive(true);
-                        break;
-                    }
-                    else
-                        _rightEngine.SetActive(true);
+                if (!_leftEngine.activeInHierarchy)
+                {
+                    _leftEngine.SetActive(true);
                     break;
+                }
+                else
+                    _rightEngine.SetActive(true);
+                break;
             case 2:
                 if (!_rightEngine.activeInHierarchy)
                 {
@@ -144,7 +164,7 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject);
             _spawnManager.OnPlayerDeath();
             GameObject explode = Instantiate(_explosionVisual, transform.position, Quaternion.identity);
-                    Destroy(explode, 2.5f);
+            Destroy(explode, 2.5f);
         }
     }
 
@@ -156,8 +176,8 @@ public class Player : MonoBehaviour
 
     IEnumerator TripleShotPowerDownRoutine()
     {
-            yield return new WaitForSeconds(5.0f);
-            _isTripleShotActive = false;
+        yield return new WaitForSeconds(5.0f);
+        _isTripleShotActive = false;
     }
 
     public void SpeedBoostActive()
@@ -174,7 +194,7 @@ public class Player : MonoBehaviour
 
     public void ShieldBoostActive()
     {
-        _shieldVisual.SetActive(true);
+        _shieldVisual[2].SetActive(true);
         _isShieldActive = true;
     }
 
