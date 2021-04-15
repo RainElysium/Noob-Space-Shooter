@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
     private GameObject _thrusterVisual;
 
     private AudioSource _audioSource;
+    private AudioSource _thrusterAudioSource;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
 
@@ -54,16 +55,20 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        transform.position = new Vector3(0.15f, -3.99f, 0);
+        transform.position = new Vector3(-9.59f, 0.39f, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
+        _thrusterAudioSource = _thrusterVisual.gameObject.GetComponent<AudioSource>();
 
         if (!_audioSource)
             Debug.LogError("Audiosource in Player is NULL");
 
         if (!_spawnManager)
             Debug.LogError("Spawn Manager is NULL");
+
+        if (!_thrusterAudioSource)
+            Debug.LogError("Thruster Audiosource is NULL");
     }
 
     // Update is called once per frame
@@ -79,8 +84,8 @@ public class Player : MonoBehaviour
             _speed *= _thrusterMultiplier;
             _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.35f, 0);
             _isThrustersActive = true;
-            _audioSource.clip = _thrusterClip;
-            _audioSource.Play();
+            _thrusterAudioSource.clip = _thrusterClip;
+            _thrusterAudioSource.Play();
             _uiManager.ThrusterCooldown();
         }
 
@@ -95,16 +100,18 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+        Vector3 direction = new Vector3(verticalInput, horizontalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.64f, 6.20f), 0);
 
-        if (transform.position.x <= -11.28f)
-            transform.position = new Vector3(11.33f, transform.position.y, 0);
-        else if (transform.position.x >= 11.33f)
-            transform.position = new Vector3(-11.28f, transform.position.y, 0);
+        if (transform.position.x <= -11.27f)
+            transform.position = new Vector3(-11.27f, transform.position.y, 0);
+
+        if  (transform.position.x >= -1.42f)
+            transform.position = new Vector3(-1.42f, transform.position.y, 0);
+
     }
 
     void FireLaser()
@@ -116,14 +123,14 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (_isTripleShotActive && !_isHackShotActive)
+        if (_isTripleShotActive && !_isHackShotActive) // FIRE TRIPLE SHOTS!
         {
             Instantiate(_tripleShot, transform.position, Quaternion.identity);
         }
 
-        if (!_isHackShotActive && !_isTripleShotActive)
+        if (!_isHackShotActive && !_isTripleShotActive) // FIRE REGULAR LASERS!
         {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.863f, 0), Quaternion.identity);
+            Instantiate(_laserPrefab, transform.position + new Vector3(0.853f, 0, 0), Quaternion.identity);
             --_ammoCount;
             _uiManager.UpdateAmmo(_ammoCount);
         }
@@ -142,7 +149,7 @@ public class Player : MonoBehaviour
                 _isHackShotActive = false;
         }
 
-        _canFire = Time.time + _fireRate;
+            _canFire = Time.time + _fireRate;
             _audioSource.clip = _laserSoundClip;
             _audioSource.Play();
 

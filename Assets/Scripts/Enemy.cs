@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     private GameObject _laserPrefab;
     [SerializeField]
     private GameObject _hackVisual;
+    [SerializeField]
+    private GameObject _enemyThruster;
 
     private float _canFire;
     private float _fireRate;
@@ -91,12 +93,12 @@ public class Enemy : MonoBehaviour
     }
     private void CalculateMovement()
     {
-     transform.Translate(Vector3.down * _speed * Time.deltaTime);
+     transform.Translate(Vector3.left * _speed * Time.deltaTime);
 
-     if (transform.position.y <= -6.42f)
+     if (transform.position.x <= -13.0f)
      {
-        float randomX = Random.Range(-9.3f, 9.3f);
-        transform.position = new Vector3(randomX, 6.37f);
+        float randomY = Random.Range(-4.53f, 6.2f);
+        transform.position = new Vector3(10.45f, randomY);
      }
 
     }
@@ -145,6 +147,7 @@ public class Enemy : MonoBehaviour
                     _onEnemyDeath.SetTrigger("OnEnemyDeath");
                     Destroy(this.gameObject, 2.8f);
                     Destroy(GetComponent<Collider2D>());
+                    _enemyThruster.SetActive(false);
                     _isAlive = false;
                     _speed = 0;
                     break;

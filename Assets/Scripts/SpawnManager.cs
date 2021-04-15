@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
 
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-11.17f, 8.0f), 7.39f);
+            Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
 
@@ -41,11 +41,11 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator SpawnPowerupRoutine()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(Random.Range(3.0f, 5.0f));
 
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-11.17f, 8.0f), 6.74f);
+            Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.11f, 6.2f), 0);
 
             int randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
 

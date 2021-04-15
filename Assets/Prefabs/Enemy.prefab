@@ -127,13 +127,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024940362}
-  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0.0000031739473}
-  m_LocalPosition: {x: 0.015985012, y: 1.3481262, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.70584255, w: 0.7083688}
+  m_LocalPosition: {x: 1.43, y: -0.03, z: 0}
   m_LocalScale: {x: 0.2, y: 0.24, z: 0.3}
   m_Children: []
   m_Father: {fileID: 574218115235661377}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 89.795}
 --- !u!212 &2024940365
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -282,7 +282,7 @@ SpriteRenderer:
   m_SortingLayerID: -1823986307
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 395ece076cf787142951128369340b3e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -307,6 +307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laserPrefab: {fileID: 1593049963279394967, guid: c8c299c97669d704ab6e3b39c4cae0a0, type: 3}
   _hackVisual: {fileID: 455785849}
+  _enemyThruster: {fileID: 2024940362}
 --- !u!61 &8577980024616393029
 BoxCollider2D:
   m_ObjectHideFlags: 0

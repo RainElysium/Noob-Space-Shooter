@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2920857851094382701
+--- !u!1 &118710578065082035
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8632813269435552809}
-  - component: {fileID: 9177856222456783693}
-  - component: {fileID: 2784399824913191410}
-  - component: {fileID: 1916865957816757898}
-  - component: {fileID: -5523333138101789820}
+  - component: {fileID: 1839049510566552454}
+  - component: {fileID: 7912865815986939294}
+  - component: {fileID: -6940872138552140446}
+  - component: {fileID: 2145172247461473502}
+  - component: {fileID: 3699769462908606854}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Player_Laser
@@ -20,27 +20,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8632813269435552809
+--- !u!4 &1839049510566552454
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920857851094382701}
+  m_GameObject: {fileID: 118710578065082035}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.617755, y: -0.3759526, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &9177856222456783693
+--- !u!212 &7912865815986939294
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920857851094382701}
+  m_GameObject: {fileID: 118710578065082035}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -71,57 +71,58 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1823986307
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1143e96f1a069e04799543a0cbc30713, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 3}
+  m_Size: {x: 0.54, y: 0.13}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2784399824913191410
+--- !u!114 &-6940872138552140446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920857851094382701}
+  m_GameObject: {fileID: 118710578065082035}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df68c393dc8b511498ca59ddbc788559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 8
---- !u!70 &1916865957816757898
+  _isEnemyLaser: 0
+--- !u!70 &2145172247461473502
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920857851094382701}
+  m_GameObject: {fileID: 118710578065082035}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0024417788, y: 0.0037653148}
-  m_Size: {x: 0.13211581, y: 0.5568858}
-  m_Direction: 0
---- !u!50 &-5523333138101789820
+  m_Offset: {x: 0.0017051097, y: -0.005115104}
+  m_Size: {x: 0.55364156, y: 0.120606594}
+  m_Direction: 1
+--- !u!50 &3699769462908606854
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920857851094382701}
+  m_GameObject: {fileID: 118710578065082035}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0

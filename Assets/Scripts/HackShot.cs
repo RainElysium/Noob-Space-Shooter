@@ -12,7 +12,7 @@ public class HackShot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveUp();
+        MoveRight();
 
         transform.position = Vector3.MoveTowards(this.transform.position, _target.transform.position, 5f * Time.deltaTime);
 
@@ -26,11 +26,11 @@ public class HackShot : MonoBehaviour
             Destroy(this.gameObject);
     }
 
-    void MoveUp()
+    void MoveRight()
     {
-        transform.Translate(Vector3.up * _speed * Time.deltaTime);
+        transform.Translate(Vector3.right * _speed * Time.deltaTime);
 
-        if (transform.position.y > 8.5f)
+        if (transform.position.x > 10.5f)
             Destroy(this.gameObject);
     }
 

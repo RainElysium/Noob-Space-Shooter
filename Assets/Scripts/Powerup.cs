@@ -16,9 +16,9 @@ public class Powerup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        transform.Translate(Vector3.left * _speed * Time.deltaTime);
 
-        if (transform.position.y < -6.86f)
+        if (transform.position.x <= -13.0f)
         {
             Destroy(this.gameObject);
         }
