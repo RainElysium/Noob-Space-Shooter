@@ -31,7 +31,7 @@ public class SpawnManager : MonoBehaviour
 
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-12.62f, 6.47f), 7.39f);
+            Vector3 posToSpawn = new Vector3(Random.Range(-11.17f, 8.0f), 7.39f);
             GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
 
@@ -45,9 +45,22 @@ public class SpawnManager : MonoBehaviour
 
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(Random.Range(-12.62f, 6.47f), 6.74f);
-            int randomPowerUp = Random.Range(0, 5);
-            Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);
+            Vector3 posToSpawn = new Vector3(Random.Range(-11.17f, 8.0f), 6.74f);
+
+            int randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
+
+            if (randomPowerUp <= 25) // rare spawn - Hack 25%
+            {
+                Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
+            }
+            else if (randomPowerUp > 25 && randomPowerUp <= 55)  // rare spawn - Health 30%
+            {
+                Instantiate(_powerups[4], posToSpawn, Quaternion.identity);
+            }
+            else if (randomPowerUp > 55  && randomPowerUp <= 100) // main spawns - 45%
+            {
+                Instantiate(_powerups[Random.Range(1, 4)], posToSpawn, Quaternion.identity);
+            }
             yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }

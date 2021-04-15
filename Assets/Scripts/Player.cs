@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _tripleShot;
     [SerializeField]
+    private GameObject _hackShot;
+    [SerializeField]
     private GameObject[] _shieldVisual;
     [SerializeField]
     private float _fireRate = 0.2f;
@@ -21,23 +23,33 @@ public class Player : MonoBehaviour
     private int _lives = 3;
     [SerializeField]
     private GameObject _leftEngine, _rightEngine;
-
     [SerializeField]
     private AudioClip _laserSoundClip;
     [SerializeField]
     private AudioClip _outOfAmmoClip;
     [SerializeField]
+    private AudioClip _thrusterClip;
+    [SerializeField]
     private GameObject _explosionVisual;
+    [SerializeField]
+    private GameObject _leftHack, _rightHack;
+    [SerializeField]
+    private GameObject _thrusterVisual;
+    
+    
     private AudioSource _audioSource;
-
     private SpawnManager _spawnManager;
+    private UIManager _uiManager;
 
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
+    private bool _isHackShotActive = false;
+    private bool _isThrustersActive = false;
+
+    private int _hackShotCount;
     private int _shieldCharges = 3;
     private int _ammoCount = 15;
 
-    private UIManager _uiManager;
     private int _score;
     private float _canFire = -1f;
 
@@ -63,12 +75,20 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
             FireLaser();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) // Thrusters engage!
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_isThrustersActive) // Thrusters engage!
+        {
             _speed *= _thrusterMultiplier;
+            _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.35f, 0);
+            _isThrustersActive = true;
+            _audioSource.clip = _thrusterClip;
+            _audioSource.Play();
+            _uiManager.ThrusterCooldown();
+        }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift)) // Thrusters disengage!
-            _speed /= _thrusterMultiplier;
-
+        if (Input.GetKeyUp(KeyCode.LeftShift) && _isThrustersActive) // Thrusters disengage!
+        {
+            _speed = 5f;
+        }
     }
 
     void CalculateMovement()
@@ -97,18 +117,35 @@ public class Player : MonoBehaviour
             return;
         }
 
-        if (_isTripleShotActive)
+        if (_isTripleShotActive && !_isHackShotActive)
         {
             Instantiate(_tripleShot, transform.position, Quaternion.identity);
         }
-        else
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.032f, 0), Quaternion.identity);
+
+        if (!_isHackShotActive && !_isTripleShotActive)
+        {
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.863f, 0), Quaternion.identity);
+            --_ammoCount;
+            _uiManager.UpdateAmmo(_ammoCount);
+        }
+
+        if (_isHackShotActive && !_isTripleShotActive && _hackShotCount > 0) // FIRE HACKS!
+        {
+            Instantiate(_hackShot, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+            --_hackShotCount;
+
+            if (_leftHack.activeInHierarchy) // disable hack visuals
+                _leftHack.SetActive(false);
+            else if (_rightHack.activeInHierarchy)
+                _rightHack.SetActive(false);
+
+            if (_hackShotCount <= 0)
+                _isHackShotActive = false;
+        }
 
         _canFire = Time.time + _fireRate;
-        _audioSource.clip = _laserSoundClip;
-        _audioSource.Play();
-        --_ammoCount;
-        _uiManager.UpdateAmmo(_ammoCount);
+            _audioSource.clip = _laserSoundClip;
+            _audioSource.Play();
 
 
     }
@@ -237,10 +274,33 @@ public class Player : MonoBehaviour
             }
 
             _uiManager.UpdateLives(_lives);
-
         }
+    }
+    public void HackPowerup()
+    {
+        _isHackShotActive = true;
+        _hackShotCount = 2;
+        HackCooldownRoutine();
 
+        _leftHack.SetActive(true);
+        _rightHack.SetActive(true);
+    }
 
+    IEnumerator HackCooldownRoutine()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isHackShotActive = false;
+    }
+
+    public void ReleaseThrusters()
+    {
+        _isThrustersActive = false;
+    }
+
+    public void PowerDownThrusters()
+    {
+        _speed = 5f;
+        _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.15f, 0);
     }
 }
 

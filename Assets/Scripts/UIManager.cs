@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     public Text _RestartR;
     public int _score;
     private GameManager _gameManager;
+    private Player _player;
+    [SerializeField]
+    private Animator _beginCooldown;
     private bool _stopAmmoFlash = false;
 
     // Start is called before the first frame update
@@ -32,6 +35,11 @@ public class UIManager : MonoBehaviour
 
         if (!_gameManager)
             Debug.LogError("GameManager is NULL.");
+
+        _player = GameObject.Find("Player").GetComponent<Player>();
+
+        if (!_player)
+            Debug.LogError("Player is NULL.");
 
     }
 
@@ -104,5 +112,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ThrusterCooldown()
+    {
+            StartCoroutine(BeginThrusterCooldownAnim());
+    }
 
+    IEnumerator BeginThrusterCooldownAnim()
+    {
+        yield return new WaitForSeconds(5f); // wait 5 seconds
+        _player.PowerDownThrusters();
+
+        _beginCooldown.SetTrigger("BeginCooldown");
+        yield return new WaitForSeconds(10f); // wait 10 seconds
+        _beginCooldown.ResetTrigger("BeginCooldown");
+        _player.ReleaseThrusters();
+
+        StopCoroutine(BeginThrusterCooldownAnim());
+    }
 }

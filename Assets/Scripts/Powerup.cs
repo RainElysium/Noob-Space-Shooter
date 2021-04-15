@@ -50,6 +50,9 @@ public class Powerup : MonoBehaviour
                     case 4: // Health
                         player.HealthPowerup();
                         break;
+                    case 5: // Hack
+                        player.HackPowerup();
+                        break;
                     default:
                         Debug.Log("Default value");
                         break;
