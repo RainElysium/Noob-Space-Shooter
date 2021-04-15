@@ -35,8 +35,7 @@ public class Player : MonoBehaviour
     private GameObject _leftHack, _rightHack;
     [SerializeField]
     private GameObject _thrusterVisual;
-    
-    
+
     private AudioSource _audioSource;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
@@ -152,6 +151,8 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        _uiManager.CameraShake();
+
         if (_isShieldActive)
         {
             --_shieldCharges;

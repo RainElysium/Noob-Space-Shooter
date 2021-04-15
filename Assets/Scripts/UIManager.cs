@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour
     private Player _player;
     [SerializeField]
     private Animator _beginCooldown;
+    [SerializeField]
+    private Animator _cameraShake;
+
     private bool _stopAmmoFlash = false;
 
     // Start is called before the first frame update
@@ -128,5 +131,10 @@ public class UIManager : MonoBehaviour
         _player.ReleaseThrusters();
 
         StopCoroutine(BeginThrusterCooldownAnim());
+    }
+
+    public void CameraShake()
+    {
+        _cameraShake.SetTrigger("ShakeScreen");
     }
 }
