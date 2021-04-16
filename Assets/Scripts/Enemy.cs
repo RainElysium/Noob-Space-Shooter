@@ -142,12 +142,15 @@ public class Enemy : MonoBehaviour
 
             case "Enemy":
                 {
-                    Destroy(this.gameObject, 2.8f);
-                    Destroy(GetComponent<Collider2D>());
-                    _audioSource.Play();
-                    _onEnemyDeath.SetTrigger("OnEnemyDeath");
-                    _isAlive = false;
-                    _speed = .5f;
+                    if (_enemyHacked)
+                    {
+                        Destroy(this.gameObject, 2.8f);
+                        Destroy(GetComponent<Collider2D>());
+                        _audioSource.Play();
+                        _onEnemyDeath.SetTrigger("OnEnemyDeath");
+                        _isAlive = false;
+                        _speed = .5f;
+                    }
                     break;
                 }
 
