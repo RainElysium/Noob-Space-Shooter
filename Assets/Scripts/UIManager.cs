@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            _AmmoCountText.text = "Laser Charges: " + ammoCount;
+            _AmmoCountText.text = "Laser Charges: " + ammoCount + "/15";
             _stopAmmoFlash = true;
         }
     }

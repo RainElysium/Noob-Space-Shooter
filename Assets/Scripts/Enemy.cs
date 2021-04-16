@@ -133,6 +133,7 @@ public class Enemy : MonoBehaviour
                         other.transform.GetComponent<Player>().Damage();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
+                        _enemyThruster.SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                     }
@@ -148,6 +149,7 @@ public class Enemy : MonoBehaviour
                         Destroy(GetComponent<Collider2D>());
                         _audioSource.Play();
                         _onEnemyDeath.SetTrigger("OnEnemyDeath");
+                        _enemyThruster.SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                     }
