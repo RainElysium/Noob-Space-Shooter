@@ -14,7 +14,7 @@ public class HackShot : MonoBehaviour
     {
         MoveRight();
 
-        transform.position = Vector3.MoveTowards(this.transform.position, _target.transform.position, 5f * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, 5f * Time.deltaTime);
 
         if (transform.position == _target.transform.position)
         {

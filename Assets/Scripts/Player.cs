@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        if (_ammoCount < 1)
+        if (_ammoCount < 1 && !_isHackShotActive)
         {
             _audioSource.clip = _outOfAmmoClip;
             _audioSource.Play();

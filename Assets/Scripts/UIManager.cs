@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     private Text _GameOver;
     [SerializeField]
     public Text _RestartR;
+    [SerializeField]
+    private Text _waveText;
+
     public int _score;
     private GameManager _gameManager;
     private Player _player;
@@ -24,6 +27,8 @@ public class UIManager : MonoBehaviour
     private Animator _beginCooldown;
     [SerializeField]
     private Animator _cameraShake;
+    [SerializeField]
+    private SpawnManager _spawnManager;
 
     private bool _stopAmmoFlash = false;
 
@@ -45,7 +50,6 @@ public class UIManager : MonoBehaviour
             Debug.LogError("Player is NULL.");
 
     }
-
     // Update is called once per frame
     public void UpdateScore(int score)
     {
@@ -136,5 +140,29 @@ public class UIManager : MonoBehaviour
     public void CameraShake()
     {
         _cameraShake.SetTrigger("ShakeScreen");
+    }
+
+    public void ShowWaveNumber(int wave)
+    {
+        _waveText.text = "WAVE " + wave;
+        _waveText.gameObject.SetActive(true);
+        StartCoroutine(FadeWaveText());
+    }
+
+    public IEnumerator FadeWaveText()
+    {
+        _waveText.color = new Color(_waveText.color.r, _waveText.color.g, _waveText.color.b, 0);
+
+        while (_waveText.color.a < 1.0f)
+        {
+            _waveText.color = new Color(_waveText.color.r, _waveText.color.g, _waveText.color.b, _waveText.color.a + (Time.deltaTime / 1));
+            yield return null;
+        }
+
+        while (_waveText.color.a > 0.0f)
+        {
+            _waveText.color = new Color(_waveText.color.r, _waveText.color.g, _waveText.color.b, _waveText.color.a - (Time.deltaTime / 5));
+            yield return null;
+        }
     }
 }

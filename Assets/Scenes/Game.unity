@@ -407,6 +407,85 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &334102204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 334102205}
+  - component: {fileID: 334102207}
+  - component: {fileID: 334102206}
+  m_Layer: 5
+  m_Name: Wave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &334102205
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334102204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1503082157}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -24, y: -92.5}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &334102206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334102204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.119927004, g: 0.6961207, b: 0.7264151, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 66
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 68
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: WAVE
+--- !u!222 &334102207
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334102204}
+  m_CullTransparentMesh: 1
 --- !u!1 &379194853
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +723,9 @@ MonoBehaviour:
   - {fileID: 6888885944787789699, guid: 3eb7331bbd4db904da9f7c12f2b3fae8, type: 3}
   - {fileID: 3334193488710666804, guid: f5f250e466821ff47a5e6eaec86074e2, type: 3}
   _enemyContainer: {fileID: 1626529733}
-  _stopSpawning: 0
+  _uiManager: {fileID: 0}
+  _enemyCount: 10
+  _waveNumber: 1
 --- !u!4 &396740862
 Transform:
   m_ObjectHideFlags: 0
@@ -2358,6 +2439,7 @@ RectTransform:
   - {fileID: 449449068}
   - {fileID: 454070532}
   - {fileID: 1463859509}
+  - {fileID: 334102205}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2449,9 +2531,11 @@ MonoBehaviour:
   _LivesImg: {fileID: 239845944}
   _GameOver: {fileID: 1841145606}
   _RestartR: {fileID: 449449066}
+  _waveText: {fileID: 334102206}
   _score: 0
   _beginCooldown: {fileID: 1463859512}
   _cameraShake: {fileID: 1351153370}
+  _spawnManager: {fileID: 0}
 --- !u!1 &1626529733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2644,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: GAME OVER
+  m_Text: YOU DIED
 --- !u!1 &1892375558
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,11 +27,12 @@ public class Enemy : MonoBehaviour
     private bool _doOnce = true;
     private int _randomGen;
     private Vector3 _randomVector;
-    private int _pathGenerator;
-    private bool _respawned = false;
-    private float rotateValue = 0;
-    [SerializeField]
+    private float _rotateValue = 0;
     float yPosition;
+    private SpawnManager _spawnManager;
+
+    [SerializeField]
+    private int _pathGenerator;
 
     private void Start()
     {
@@ -46,7 +47,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("Animator is NULL");
 
         _audioSource = GetComponent<AudioSource>();
-
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _pathGenerator = Random.Range(1, 4); // random path generator
         yPosition = transform.position.y; // get initial spawn location and save it for pathing purposes
     }
@@ -119,9 +120,6 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (_hackVisual.activeInHierarchy)
-            _hackVisual.SetActive(false);
-
         switch (other.tag)
         {
             case "Player":
@@ -133,9 +131,12 @@ public class Enemy : MonoBehaviour
                         other.transform.GetComponent<Player>().Damage();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
+                        _hackVisual.SetActive(false);
                         _enemyThruster.SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
+                        _spawnManager.AddEnemyDeathCount();
+                        
                     }
 
                     break;
@@ -143,15 +144,19 @@ public class Enemy : MonoBehaviour
 
             case "Enemy":
                 {
-                    if (_enemyHacked)
+                    Enemy enemy = other.GetComponentInParent<Enemy>();
+
+                    if (enemy.isEnemyHacked(enemy) || _enemyHacked)
                     {
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
+                        _hackVisual.SetActive(false);
                         _audioSource.Play();
                         _onEnemyDeath.SetTrigger("OnEnemyDeath");
                         _enemyThruster.SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
+                        _spawnManager.AddEnemyDeathCount();
                     }
                     break;
                 }
@@ -162,6 +167,7 @@ public class Enemy : MonoBehaviour
                         _player.UpdateScore();
 
                     Destroy(other.gameObject);
+                    _hackVisual.SetActive(false);
                     _audioSource.Play();
                     _onEnemyDeath.SetTrigger("OnEnemyDeath");
                     Destroy(this.gameObject, 2.8f);
@@ -169,6 +175,7 @@ public class Enemy : MonoBehaviour
                     _enemyThruster.SetActive(false);
                     _isAlive = false;
                     _speed = 0;
+                    _spawnManager.AddEnemyDeathCount();
                     break;
                 }
         }
@@ -178,6 +185,13 @@ public class Enemy : MonoBehaviour
     {
         _hackVisual.SetActive(true);
         _enemyHacked = true;
+    }
+
+    private bool isEnemyHacked(Enemy target)
+    {
+        if (target._enemyHacked)
+            return true;
+        else return false;
     }
 
     void PathChange()
@@ -192,33 +206,33 @@ public class Enemy : MonoBehaviour
                 {
                     if (yPosition >= 0)
                     {
-                        if (xPosition <= 6.50f)
-                            rotateValue = 50f;
+                        if (xPosition <= 7.50f)
+                            _rotateValue = 30f;
                         if (xPosition <= 3.10f)
-                            rotateValue = 0f;
-                        if (xPosition <= 1.00f)
-                            rotateValue = -10f;
-                        if (xPosition <= -1.10f)
-                            rotateValue = 0f;
-                        if (xPosition <= -2.90f)
-                            rotateValue = -30f;
-                        if (xPosition <= -6.25f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
+                        if (xPosition <= 1.50f)
+                            _rotateValue = -10f;
+                        if (xPosition <= -1.50f)
+                            _rotateValue = 0f;
+                        if (xPosition <= -2.75f)
+                            _rotateValue = -30f;
+                        if (xPosition <= -7.25f)
+                            _rotateValue = 0f;
                     }
                     else
                     {
-                        if (xPosition <= 6.50f)
-                            rotateValue = -50f;
-                        if (xPosition <= 3.10f)
-                            rotateValue = 0f;
-                        if (xPosition <= 1.00f)
-                            rotateValue = 10f;
+                        if (xPosition <= 5.50f)
+                            _rotateValue = -50f;
+                        if (xPosition <= 2.50f)
+                            _rotateValue = 0f;
+                        if (xPosition <= 1.25f)
+                            _rotateValue = 10f;
                         if (xPosition <= -1.10f)
-                            rotateValue = 0f;
-                        if (xPosition <= -2.90f)
-                            rotateValue = 30f;
-                        if (xPosition <= -6.25f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
+                        if (xPosition <= -3.90f)
+                            _rotateValue = 30f;
+                        if (xPosition <= -5.25f)
+                            _rotateValue = 0f;
                     }
                     break;
                 }
@@ -226,23 +240,23 @@ public class Enemy : MonoBehaviour
                 {
                     if (yPosition >= 0)
                     {
-                        if (xPosition <= 6.90f)
-                            rotateValue = -31.6f;
-                        if (xPosition <= 4.70f)
-                            rotateValue = 0f;
-                        if (xPosition <= 1.00f)
-                            rotateValue = 52f;
-                        if (xPosition <= -1.50f)
-                            rotateValue = 0f;
-                        if (xPosition <= -7.05f)
-                            rotateValue = -31f;
+                        if (xPosition <= 4.90f)
+                            _rotateValue = -31.6f;
+                        if (xPosition <= 3.70f)
+                            _rotateValue = 0f;
+                        if (xPosition <= 2.00f)
+                            _rotateValue = 52f;
+                        if (xPosition <= -2.50f)
+                            _rotateValue = 0f;
+                        if (xPosition <= -6.50f)
+                            _rotateValue = -31f;
                     }
                     else
                     {
-                        if (xPosition <= 1.72f)
-                            rotateValue = 28.84f;
-                        if (xPosition <= -1.33f)
-                            rotateValue = 0f;
+                        if (xPosition <= 2.72f)
+                            _rotateValue = 28.84f;
+                        if (xPosition <= -2.33f)
+                            _rotateValue = 0f;
                     }
                     break;
                 }
@@ -251,24 +265,24 @@ public class Enemy : MonoBehaviour
                     if (yPosition >= 0)
                     {
                         if (xPosition <= 1f)
-                            rotateValue = 35f;
+                            _rotateValue = 35f;
                         if (xPosition <= -3.33f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                         if (xPosition <= -6.45f)
-                            rotateValue = -47.24f;
+                            _rotateValue = -47.24f;
                         if (xPosition <= -9.55f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                     }
                     else
                     {
                         if (xPosition <= 3.43f)
-                            rotateValue = -19.11f;
+                            _rotateValue = -19.11f;
                         if (xPosition <= 0.45f)
-                            rotateValue = -77f;
+                            _rotateValue = -77f;
                         if (xPosition <= 0.14f)
-                            rotateValue = -38f;
+                            _rotateValue = -38f;
                         if (xPosition <= -3.44f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                     }
                     break;
                 }
@@ -277,34 +291,34 @@ public class Enemy : MonoBehaviour
                     if (yPosition >= 0)
                     {
                         if (xPosition <= 3.31f)
-                            rotateValue = 41f;
+                            _rotateValue = 41f;
                         if (xPosition <= -3.23f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                         if (xPosition <= -5.31f)
-                            rotateValue = -10f;
+                            _rotateValue = -10f;
                         if (xPosition <= -8.28f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                     }
                     else
                     {
                         if (xPosition <= 6.50f)
-                            rotateValue = Random.Range(-70f, 70f);
+                            _rotateValue = Random.Range(-70f, 70f);
                         if (xPosition <= 3.10f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                         if (xPosition <= 1.00f)
-                            rotateValue = Random.Range(-70f, 70f);
+                            _rotateValue = Random.Range(-70f, 70f);
                         if (xPosition <= -1.10f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                         if (xPosition <= -2.90f)
-                            rotateValue = Random.Range(-70f, 70f);
+                            _rotateValue = Random.Range(-70f, 70f);
                         if (xPosition <= -6.25f)
-                            rotateValue = 0f;
+                            _rotateValue = 0f;
                     }
                     break;
                 }
         }
 
-        transform.eulerAngles = Vector3.forward * rotateValue;
+        transform.eulerAngles = Vector3.forward * _rotateValue;
     }
 
 }

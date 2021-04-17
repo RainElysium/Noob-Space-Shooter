@@ -10,32 +10,66 @@ public class SpawnManager : MonoBehaviour
     private GameObject[] _powerups;
     [SerializeField]
     private GameObject _enemyContainer;
-
     [SerializeField]
-    private bool _stopSpawning = false;
+    private UIManager _uiManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private bool _stopSpawning = false;
+    [SerializeField]
+    private int _enemyCount = 10;
+    [SerializeField]
+    private int _waveNumber = 1;
+    private int _spawnRate;
+    private float _spawnInterval = 3.0f;
+
+    private void Start()
     {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
+        _uiManager.ShowWaveNumber(1);
+    }
+
+    public void Update()
+    {
+        _spawnRate = _enemyCount / 10;
+
+        if (_spawnRate > _waveNumber)
+        {
+            _waveNumber = _spawnRate;
+            _uiManager.ShowWaveNumber(_waveNumber);
+        }
+        if (_enemyCount % 10 == 0)
+            //_uiManager.WaveDisplay();
+
+        if (_waveNumber <= 2)
+        {
+            _waveNumber = 1;
+            _spawnInterval = 1.5f;
+        }
+        else
+            _spawnInterval = 3.0f;
     }
 
     IEnumerator SpawnEnemyRoutine()
-    {
+    { 
+
         yield return new WaitForSeconds(3.0f);
 
         while (!_stopSpawning)
         {
-            Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
-            GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+            for (int i = 0; i < _waveNumber; i++)
+            {
+                yield return new WaitForSeconds(1.5f);
+                Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
 
-            yield return new WaitForSeconds(5.0f);
+            }
+            yield return new WaitForSeconds(3.0f);
         }
     }
 
@@ -69,4 +103,23 @@ public class SpawnManager : MonoBehaviour
     {
         _stopSpawning = true;
     }
+
+    public void AddEnemyDeathCount()
+    {
+        _enemyCount++;
+    }
+
+    public int WaveNumber()
+    {
+        Debug.Log("WaveNumber returned: " + _waveNumber);
+        return _waveNumber;
+    }
+
+    //public IEnumerator WaveDisplay()
+    //{
+    //    _waveText.gameObject.SetActive(true);
+    //    _waveText.text = "WAVE " + _waveNumber;
+    //    yield return new WaitForSeconds(5.0f);
+    //    _waveText.gameObject.SetActive(false);
+    //}
 }
