@@ -310,6 +310,13 @@ public class Player : MonoBehaviour
         _speed = 5f;
         _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.15f, 0);
     }
+
+    public void AsteroidImpact()
+    {
+        Damage();
+        _speed /= 2; // half speed
+        StartCoroutine(SpeedBoostPowerDownRoutine()); // restore speed after 5s
+    }
 }
 
 

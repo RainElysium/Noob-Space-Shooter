@@ -53,6 +53,9 @@ public class Powerup : MonoBehaviour
                     case 5: // Hack
                         player.HackPowerup();
                         break;
+                    case 6: // Asteroid Impact  
+                        player.AsteroidImpact();
+                        break;
                     default:
                         Debug.Log("Default value");
                         break;

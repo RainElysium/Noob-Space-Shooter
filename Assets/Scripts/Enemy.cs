@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 1f;
+    private float _speed = 2f;
 
     private Player _player;
 
@@ -131,6 +131,7 @@ public class Enemy : MonoBehaviour
                 {
                     if (_player)
                     {
+                        _player.UpdateScore();
                         _audioSource.Play();
                         _onEnemyDeath.SetTrigger("OnEnemyDeath");
                         other.transform.GetComponent<Player>().Damage();
@@ -153,6 +154,7 @@ public class Enemy : MonoBehaviour
 
                     if (enemy.IsEnemyHacked() || _enemyHacked)
                     {
+                        _player.UpdateScore();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
                         _hackVisual.SetActive(false);

@@ -12,6 +12,8 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
     [SerializeField]
     private UIManager _uiManager;
+    [SerializeField]
+    private int _randomPowerUp;
 
     private bool _stopSpawning = false;
     [SerializeField]
@@ -20,13 +22,11 @@ public class SpawnManager : MonoBehaviour
     private int _waveNumber = 1;
     private int _spawnRate;
     private float _spawnInterval = 3.0f;
-    private Enemy _enemy;
     private float _increasedSpeed = 1f;
 
     private void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        _enemy = GameObject.Find("Enemy").GetComponent<Enemy>();
     }
 
     public void StartSpawning()
@@ -53,10 +53,10 @@ public class SpawnManager : MonoBehaviour
         if (_waveNumber < 2)
         {
             _waveNumber = 1;
-            _spawnInterval = 1.5f;
+            _spawnInterval = 3f;
         }
         else
-            _spawnInterval = 3.0f;
+            _spawnInterval = 2f;
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -86,20 +86,38 @@ public class SpawnManager : MonoBehaviour
         {
             Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.11f, 6.2f), 0);
 
-            int randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
+            _randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
 
-            if (randomPowerUp <= 25) // rare spawn - Hack 25%
+            if (_randomPowerUp <= 25) // rare spawn - Hack 25%
             {
                 Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
             }
-            else if (randomPowerUp > 25 && randomPowerUp <= 55)  // rare spawn - Health 30%
+            else if (_randomPowerUp > 25 && _randomPowerUp <= 55)  // rare spawn - Health 30%
             {
                 Instantiate(_powerups[4], posToSpawn, Quaternion.identity);
             }
-            else if (randomPowerUp > 55  && randomPowerUp <= 100) // main spawns - 45%
+            else if (_randomPowerUp > 55  && _randomPowerUp <= 100) // main spawns - 45%
             {
-                Instantiate(_powerups[Random.Range(1, 4)], posToSpawn, Quaternion.identity);
+                Instantiate(_powerups[Random.Range(0, 3)], posToSpawn, Quaternion.identity);
             }
+
+            if (_randomPowerUp <= 50 && _waveNumber >= 2) // additional rare spawn of damaging & slowing asteroid
+            {
+                float zRotation = 0f;
+
+                if (_randomPowerUp <= 50)
+                    posToSpawn = new Vector3(Random.Range(0f, 11.5f), -6f, 0);
+                else
+                    posToSpawn = new Vector3(Random.Range(0f, 11.5f), 8f, 0);
+
+                if (posToSpawn.y > 0)
+                    zRotation = Random.Range(15f, 45f);
+                else
+                    zRotation = Random.Range(-45f, -15f);
+
+                Instantiate(_powerups[6], posToSpawn, Quaternion.Euler(0, 0, zRotation));
+            }
+
             yield return new WaitForSeconds(Random.Range(3, 8));
         }
     }
