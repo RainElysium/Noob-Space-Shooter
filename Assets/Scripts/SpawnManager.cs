@@ -20,10 +20,13 @@ public class SpawnManager : MonoBehaviour
     private int _waveNumber = 1;
     private int _spawnRate;
     private float _spawnInterval = 3.0f;
+    private Enemy _enemy;
+    private float _increasedSpeed = 1f;
 
     private void Start()
     {
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _enemy = GameObject.Find("Enemy").GetComponent<Enemy>();
     }
 
     public void StartSpawning()
@@ -41,11 +44,13 @@ public class SpawnManager : MonoBehaviour
         {
             _waveNumber = _spawnRate;
             _uiManager.ShowWaveNumber(_waveNumber);
+            ++_increasedSpeed;
+
         }
         if (_enemyCount % 10 == 0)
             //_uiManager.WaveDisplay();
 
-        if (_waveNumber <= 2)
+        if (_waveNumber < 2)
         {
             _waveNumber = 1;
             _spawnInterval = 1.5f;
@@ -115,11 +120,8 @@ public class SpawnManager : MonoBehaviour
         return _waveNumber;
     }
 
-    //public IEnumerator WaveDisplay()
-    //{
-    //    _waveText.gameObject.SetActive(true);
-    //    _waveText.text = "WAVE " + _waveNumber;
-    //    yield return new WaitForSeconds(5.0f);
-    //    _waveText.gameObject.SetActive(false);
-    //}
+    public float GetIncreasedSpeed()
+    {
+        return _increasedSpeed;
+    }
 }

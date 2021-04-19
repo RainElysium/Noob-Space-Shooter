@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float _speed = 2f;
+    [SerializeField]
+    private float _speed = 1f;
 
     private Player _player;
 
@@ -30,6 +31,7 @@ public class Enemy : MonoBehaviour
     private float _rotateValue = 0;
     float yPosition;
     private SpawnManager _spawnManager;
+    private float _speedMultiplier;
 
     [SerializeField]
     private int _pathGenerator;
@@ -50,6 +52,9 @@ public class Enemy : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _pathGenerator = Random.Range(1, 4); // random path generator
         yPosition = transform.position.y; // get initial spawn location and save it for pathing purposes
+
+        _speedMultiplier = _spawnManager.GetIncreasedSpeed(); // check for increased speed at each spawn
+        _speed *= _speedMultiplier;
     }
 
     void Update()
@@ -108,7 +113,7 @@ public class Enemy : MonoBehaviour
         
         PathChange();
 
-        if (transform.position.x <= -13.0f || transform.position.y >= 7.35f || transform.position.y <= -6.0f)
+        if (transform.position.x <= -13.0f || transform.position.y >= 8.14f || transform.position.y <= -6.0f)
         {
             float randomY = Random.Range(-4.53f, 6.2f);
             transform.position = new Vector3(10.45f, randomY);
@@ -146,7 +151,7 @@ public class Enemy : MonoBehaviour
                 {
                     Enemy enemy = other.GetComponentInParent<Enemy>();
 
-                    if (enemy.isEnemyHacked(enemy) || _enemyHacked)
+                    if (enemy.IsEnemyHacked() || _enemyHacked)
                     {
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
@@ -185,11 +190,14 @@ public class Enemy : MonoBehaviour
     {
         _hackVisual.SetActive(true);
         _enemyHacked = true;
+
+        StartCoroutine(SelfDestructRoutine());
+
     }
 
-    private bool isEnemyHacked(Enemy target)
+    private bool IsEnemyHacked()
     {
-        if (target._enemyHacked)
+        if (_enemyHacked)
             return true;
         else return false;
     }
@@ -321,5 +329,19 @@ public class Enemy : MonoBehaviour
         transform.eulerAngles = Vector3.forward * _rotateValue;
     }
 
+    IEnumerator SelfDestructRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+
+        Destroy(this.gameObject, 2.8f);
+        Destroy(GetComponent<Collider2D>());
+        _hackVisual.SetActive(false);
+        _audioSource.Play();
+        _onEnemyDeath.SetTrigger("OnEnemyDeath");
+        _enemyThruster.SetActive(false);
+        _isAlive = false;
+        _speed = .5f;
+        _spawnManager.AddEnemyDeathCount();
+    }
 }
 
