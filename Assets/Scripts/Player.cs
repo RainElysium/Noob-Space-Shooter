@@ -227,6 +227,9 @@ public class Player : MonoBehaviour
     {
         _isTripleShotActive = true;
         StartCoroutine(TripleShotPowerDownRoutine());
+
+        if (_isHackShotActive) // disable hack shot if Triple shot is picked up.
+            _isHackShotActive = false;
     }
 
     IEnumerator TripleShotPowerDownRoutine()
@@ -292,6 +295,9 @@ public class Player : MonoBehaviour
 
         _leftHack.SetActive(true);
         _rightHack.SetActive(true);
+
+        if (_isTripleShotActive)
+            _isTripleShotActive = false; // disable triple shot here if active.
     }
 
     IEnumerator HackCooldownRoutine()

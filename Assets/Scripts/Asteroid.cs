@@ -24,10 +24,10 @@ public class Asteroid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.tag == "Starting_Asteroid")
+        if (tag == "Starting_Asteroid")
             transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime, Space.Self);
 
-        if (this.tag != "Starting_Asteroid")
+        if (tag != "Starting_Asteroid")
             CalculateMovement();
 
         if (transform.position.x <= -20.0f || transform.position.y >= 8.0f)
@@ -51,8 +51,15 @@ public class Asteroid : MonoBehaviour
                         Destroy(GetComponent<Collider2D>());
                     }
 
-                    if (this.tag == "Starting_Asteroid")
+                    if (tag == "Starting_Asteroid")
+                    {
                         _spawnManager.StartSpawning();
+                        GameObject explode = Instantiate(_explosionVisual, transform.position, Quaternion.identity);
+                        Destroy(explode, 2.5f);
+                        Destroy(other.gameObject);
+                        Destroy(this.gameObject, 0.25f);
+                        Destroy(GetComponent<Collider2D>());
+                    }
 
                     break;
                 }
