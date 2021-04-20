@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _hackVisual;
     [SerializeField]
-    private GameObject _enemyThruster;
+    private GameObject[] _enemyThruster;
 
     private float _canFire;
     private float _fireRate;
@@ -35,6 +35,11 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private int _pathGenerator;
+    [SerializeField]
+    private GameObject[] _shieldVisual;
+    [SerializeField]
+    private int _shieldCharges = 2;
+    private bool _isShieldActive = true;
 
     private void Start()
     {
@@ -84,24 +89,23 @@ public class Enemy : MonoBehaviour
             transform.Translate(_randomVector * (_speed * 2) * Time.deltaTime);
             transform.Rotate(Vector3.forward * _speed * Time.deltaTime);
         }
-        else
+        else if (tag != "Enemy_Artillery")
         {
-            CalculateMovement();
+             CalculateMovement();
 
-            if (Time.time > _canFire && _isAlive) // firing
-            {
-                _fireRate = Random.Range(2f, 5f);
-                _canFire = Time.time + _fireRate;
+          if (Time.time > _canFire && _isAlive) // firing
+          {
+              _fireRate = Random.Range(2f, 5f);
+              _canFire = Time.time + _fireRate;
 
-                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
-                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+              GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+              Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
-                for (int i = 0; i < lasers.Length; i++)
-                {
-                    lasers[i].ApplyEnemyLaser();
-                }
-
-            }
+              for (int i = 0; i < lasers.Length; i++)
+              {
+                 lasers[i].ApplyEnemyLaser();
+              }
+          }
         }
 
 
@@ -138,7 +142,7 @@ public class Enemy : MonoBehaviour
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
                         _hackVisual.SetActive(false);
-                        _enemyThruster.SetActive(false);
+                        _enemyThruster[0].SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                         _spawnManager.AddEnemyDeathCount();
@@ -160,7 +164,7 @@ public class Enemy : MonoBehaviour
                         _hackVisual.SetActive(false);
                         _audioSource.Play();
                         _onEnemyDeath.SetTrigger("OnEnemyDeath");
-                        _enemyThruster.SetActive(false);
+                        _enemyThruster[0].SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                         _spawnManager.AddEnemyDeathCount();
@@ -170,20 +174,33 @@ public class Enemy : MonoBehaviour
 
             case "Player_Laser":
                 {
-                    if (_player)
-                        _player.UpdateScore();
+                    if (_isShieldActive && tag == "Enemy_Artillery")
+                    {
+                        DamageEnemyShields();
+                        Destroy(other.gameObject);
+                        break;
+                    }
+                    else
+                    {
+                        if (_player)
+                            _player.UpdateScore();
 
-                    Destroy(other.gameObject);
-                    _hackVisual.SetActive(false);
-                    _audioSource.Play();
-                    _onEnemyDeath.SetTrigger("OnEnemyDeath");
-                    Destroy(this.gameObject, 2.8f);
-                    Destroy(GetComponent<Collider2D>());
-                    _enemyThruster.SetActive(false);
-                    _isAlive = false;
-                    _speed = 0;
-                    _spawnManager.AddEnemyDeathCount();
-                    break;
+                        Destroy(other.gameObject);
+                        _hackVisual.SetActive(false);
+                        _audioSource.Play();
+                        _onEnemyDeath.SetTrigger("OnEnemyDeath");
+                        Destroy(this.gameObject, 2.8f);
+                        Destroy(GetComponent<Collider2D>());
+                        _enemyThruster[0].SetActive(false);
+
+                        if (tag == "Enemy_Artillery")
+                            _enemyThruster[1].SetActive(false);
+
+                        _isAlive = false;
+                        _speed = 0;
+                        _spawnManager.AddEnemyDeathCount();
+                        break;
+                    }
                 }
         }
     }
@@ -207,8 +224,6 @@ public class Enemy : MonoBehaviour
     void PathChange()
     {
         float xPosition = transform.position.x;
-
-        //_pathGenerator = 1;
 
         switch (_pathGenerator) // different paths that can be called
         {
@@ -340,10 +355,27 @@ public class Enemy : MonoBehaviour
         _hackVisual.SetActive(false);
         _audioSource.Play();
         _onEnemyDeath.SetTrigger("OnEnemyDeath");
-        _enemyThruster.SetActive(false);
+        _enemyThruster[0].SetActive(false);
         _isAlive = false;
         _speed = .5f;
         _spawnManager.AddEnemyDeathCount();
+    }
+
+    void DamageEnemyShields()
+    {
+        if (_isShieldActive)
+        {
+            --_shieldCharges;
+
+            _shieldVisual[1].SetActive(false);
+            _shieldVisual[0].SetActive(true);
+
+            if (_shieldCharges <= 0)
+            {
+                _isShieldActive = false;
+                _shieldVisual[0].SetActive(false);
+            }
+        }
     }
 }
 

@@ -7,6 +7,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyPrefab;
     [SerializeField]
+    private GameObject _enemyArtillery;
+    [SerializeField]
     private GameObject[] _powerups;
     [SerializeField]
     private GameObject _enemyContainer;
@@ -21,8 +23,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private int _waveNumber = 1;
     private int _spawnRate;
-    private float _spawnInterval = 3.0f;
-    private float _increasedSpeed = 1f;
+    private float _spawnInterval;
+    //private float _spawnInterval = 3.0f;
+    private float _increasedSpeed = .25f;
 
     private void Start()
     {
@@ -44,11 +47,9 @@ public class SpawnManager : MonoBehaviour
         {
             _waveNumber = _spawnRate;
             _uiManager.ShowWaveNumber(_waveNumber);
-            ++_increasedSpeed;
+            _increasedSpeed += .25f;
 
         }
-        if (_enemyCount % 10 == 0)
-            //_uiManager.WaveDisplay();
 
         if (_waveNumber < 2)
         {
@@ -60,9 +61,9 @@ public class SpawnManager : MonoBehaviour
     }
 
     IEnumerator SpawnEnemyRoutine()
-    { 
+    {
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(_spawnInterval);
 
         while (!_stopSpawning)
         {
@@ -73,54 +74,74 @@ public class SpawnManager : MonoBehaviour
                 GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
 
+                if (_waveNumber >= 2) // only spawn 1 max in wave 2, unlimited in future waves
+                {
+                    if (_waveNumber == 2)
+                    {
+                        int rand = Random.Range(1, 100);
+                        if (rand >= 50)
+                        {
+                            if (_waveNumber == 2)
+                            {
+                                GameObject findExisting = GameObject.Find("EnemyArtillery");
+                                if (!findExisting)
+                                    Instantiate(_enemyArtillery, posToSpawn, Quaternion.identity);
+                            }
+                            else
+                                Instantiate(_enemyArtillery, posToSpawn, Quaternion.identity);
+                        }
+                    }
+
+                }
+                yield return new WaitForSeconds(3.0f);
             }
-            yield return new WaitForSeconds(3.0f);
         }
     }
 
-    IEnumerator SpawnPowerupRoutine()
-    {
-        yield return new WaitForSeconds(Random.Range(3.0f, 5.0f));
-
-        while (!_stopSpawning)
+        IEnumerator SpawnPowerupRoutine()
         {
-            Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.11f, 6.2f), 0);
+            yield return new WaitForSeconds(Random.Range(3.0f, 5.0f));
 
-            _randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
-
-            if (_randomPowerUp <= 25) // rare spawn - Hack 25%
+            while (!_stopSpawning)
             {
-                Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
+                Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.11f, 6.2f), 0);
+
+                _randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
+
+                if (_randomPowerUp <= 25) // rare spawn - Hack 25%
+                {
+                    Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
+                }
+                else if (_randomPowerUp > 25 && _randomPowerUp <= 55)  // rare spawn - Health 30%
+                {
+                    Instantiate(_powerups[4], posToSpawn, Quaternion.identity);
+                }
+                else if (_randomPowerUp > 55 && _randomPowerUp <= 100) // main spawns - 45%
+                {
+                    Instantiate(_powerups[Random.Range(0, 3)], posToSpawn, Quaternion.identity);
+                }
+
+                if (_randomPowerUp <= 50 && _waveNumber >= 2) // additional rare spawn of damaging & slowing asteroid
+                {
+                    float zRotation = 0f;
+
+                    if (_randomPowerUp <= 50)
+                        posToSpawn = new Vector3(Random.Range(0f, 11.5f), -6f, 0);
+                    else
+                        posToSpawn = new Vector3(Random.Range(0f, 11.5f), 8f, 0);
+
+                    if (posToSpawn.y > 0)
+                        zRotation = Random.Range(15f, 45f);
+                    else
+                        zRotation = Random.Range(-45f, -15f);
+
+                    Instantiate(_powerups[6], posToSpawn, Quaternion.Euler(0, 0, zRotation));
+                }
+
+                yield return new WaitForSeconds(Random.Range(3, 8));
             }
-            else if (_randomPowerUp > 25 && _randomPowerUp <= 55)  // rare spawn - Health 30%
-            {
-                Instantiate(_powerups[4], posToSpawn, Quaternion.identity);
-            }
-            else if (_randomPowerUp > 55  && _randomPowerUp <= 100) // main spawns - 45%
-            {
-                Instantiate(_powerups[Random.Range(0, 3)], posToSpawn, Quaternion.identity);
-            }
-
-            if (_randomPowerUp <= 50 && _waveNumber >= 2) // additional rare spawn of damaging & slowing asteroid
-            {
-                float zRotation = 0f;
-
-                if (_randomPowerUp <= 50)
-                    posToSpawn = new Vector3(Random.Range(0f, 11.5f), -6f, 0);
-                else
-                    posToSpawn = new Vector3(Random.Range(0f, 11.5f), 8f, 0);
-
-                if (posToSpawn.y > 0)
-                    zRotation = Random.Range(15f, 45f);
-                else
-                    zRotation = Random.Range(-45f, -15f);
-
-                Instantiate(_powerups[6], posToSpawn, Quaternion.Euler(0, 0, zRotation));
-            }
-
-            yield return new WaitForSeconds(Random.Range(3, 8));
         }
-    }
+    
 
     public void OnPlayerDeath()
     {

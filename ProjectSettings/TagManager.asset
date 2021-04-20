@@ -9,6 +9,8 @@ TagManager:
   - Laser
   - Hack_Orb
   - Starting_Asteroid
+  - Enemy_Artillery
+  - Artillery_Shot
   layers:
   - Default
   - TransparentFX

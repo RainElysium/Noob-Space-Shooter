@@ -305,9 +305,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e11b2e2674a45a449dc3a2b8025d8b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 2
   _laserPrefab: {fileID: 1593049963279394967, guid: c8c299c97669d704ab6e3b39c4cae0a0, type: 3}
   _hackVisual: {fileID: 455785849}
-  _enemyThruster: {fileID: 2024940362}
+  _enemyThruster:
+  - {fileID: 2024940362}
+  _pathGenerator: 0
+  _shieldVisual: []
+  _shieldCharges: 2
 --- !u!61 &8577980024616393029
 BoxCollider2D:
   m_ObjectHideFlags: 0

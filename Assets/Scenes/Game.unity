@@ -797,6 +797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 8343526879249685609, guid: b865b64c59b6e7441b4a5232ad5d450c, type: 3}
+  _enemyArtillery: {fileID: 4098952346767918785, guid: d754e8af59796804c82085d8301748bc, type: 3}
   _powerups:
   - {fileID: 6718260774179078786, guid: e30eea887ad057c41a259a519f8a5613, type: 3}
   - {fileID: 5564824721897737039, guid: 5d2dd65ef6c074147a278621b18aa4f3, type: 3}
@@ -866,7 +867,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &449449065
 GameObject:
@@ -2835,7 +2836,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6177961777881714681, guid: c70d4d5d39658d345baf560ef186061b, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6177961777881714681, guid: c70d4d5d39658d345baf560ef186061b, type: 3}
       propertyPath: m_LocalScale.x
@@ -2851,11 +2852,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6177961777881714681, guid: c70d4d5d39658d345baf560ef186061b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.3
+      value: -3.34
       objectReference: {fileID: 0}
     - target: {fileID: 6177961777881714681, guid: c70d4d5d39658d345baf560ef186061b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.42
+      value: 3.08
       objectReference: {fileID: 0}
     - target: {fileID: 6177961777881714681, guid: c70d4d5d39658d345baf560ef186061b, type: 3}
       propertyPath: m_LocalPosition.z
