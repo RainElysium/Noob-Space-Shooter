@@ -108,20 +108,32 @@ public class SpawnManager : MonoBehaviour
 
                 _randomPowerUp = Random.Range(1, 101); // Randomized number to add chance to spawn.
 
-                if (_randomPowerUp <= 20) // rare spawn - Hack 25%
+                if (_randomPowerUp <= 10) // rare spawn - Hack 10%
                 {
                     Instantiate(_powerups[5], posToSpawn, Quaternion.identity);
                 }
-                else if (_randomPowerUp > 20 && _randomPowerUp <= 45)  // rare spawn - Health 25%
+                else if (_randomPowerUp > 10 && _randomPowerUp <= 25)  // rare spawn - Health 15%
                 {
                     Instantiate(_powerups[4], posToSpawn, Quaternion.identity);
                 }
-                else if (_randomPowerUp > 45 && _randomPowerUp <= 100) // main spawns - 45%
+                else if (_randomPowerUp > 25 & _randomPowerUp <= 45) // main spawns - Triple Shot 20%
                 {
-                    Instantiate(_powerups[Random.Range(0, 3)], posToSpawn, Quaternion.identity);
+                    Instantiate(_powerups[0], posToSpawn, Quaternion.identity);
+                }
+                else if (_randomPowerUp > 45 & _randomPowerUp <= 55) // main spawns - Shield 10%
+                {
+                    Instantiate(_powerups[1], posToSpawn, Quaternion.identity);
+                }
+                 else if (_randomPowerUp > 55 & _randomPowerUp <= 65) // main spawns - Speed 10%
+                {
+                    Instantiate(_powerups[2], posToSpawn, Quaternion.identity);
+                }
+                else if (_randomPowerUp > 65 & _randomPowerUp <= 100) // main spawns - Ammo 35%
+                {
+                    Instantiate(_powerups[3], posToSpawn, Quaternion.identity);
                 }
 
-                if (_randomPowerUp <= 50 && _waveNumber >= 2) // additional rare spawn of damaging & slowing asteroid
+            if (_randomPowerUp <= 50 && _waveNumber >= 2) // additional rare spawn of damaging & slowing asteroid
                 {
                     float zRotation = 0f;
 
