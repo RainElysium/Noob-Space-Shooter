@@ -60,6 +60,18 @@ public class Enemy : MonoBehaviour
 
         _speedMultiplier = _spawnManager.GetIncreasedSpeed(); // check for increased speed at each spawn
         _speed *= _speedMultiplier;
+        _shieldCharges = _shieldVisual.Length;
+
+
+        if (tag != "Enemy_Artillery")
+        {
+            int rand = Random.Range(1, 101);
+
+            if (rand <= 25) // 25% chance to spawn enemy shield
+            {
+                _shieldVisual[0].SetActive(true);
+            }
+        }
     }
 
     void Update()
@@ -174,7 +186,7 @@ public class Enemy : MonoBehaviour
 
             case "Player_Laser":
                 {
-                    if (_isShieldActive && tag == "Enemy_Artillery")
+                    if (_isShieldActive)
                     {
                         DamageEnemyShields();
                         Destroy(other.gameObject);
@@ -367,8 +379,11 @@ public class Enemy : MonoBehaviour
         {
             --_shieldCharges;
 
-            _shieldVisual[1].SetActive(false);
-            _shieldVisual[0].SetActive(true);
+            if (tag == "Enemy_Artillery")
+            {
+                _shieldVisual[1].SetActive(false);
+                _shieldVisual[0].SetActive(true);
+            }
 
             if (_shieldCharges <= 0)
             {
