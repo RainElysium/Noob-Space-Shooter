@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
-    private GameObject _hackVisual;
+    private GameObject _hackVisual, _rammingSpeedVisual;
     [SerializeField]
     private GameObject[] _enemyThruster;
 
@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int _shieldCharges = 2;
     private bool _isShieldActive = true;
+    private bool _ram = false;
 
     private void Start()
     {
@@ -72,6 +73,7 @@ public class Enemy : MonoBehaviour
                 _shieldVisual[0].SetActive(true);
             }
         }
+
     }
 
     void Update()
@@ -103,30 +105,44 @@ public class Enemy : MonoBehaviour
         }
         else if (tag != "Enemy_Artillery")
         {
-             CalculateMovement();
+            CalculateMovement();
 
-          if (Time.time > _canFire && _isAlive) // firing
-          {
-              _fireRate = Random.Range(2f, 5f);
-              _canFire = Time.time + _fireRate;
+            if (Time.time > _canFire && _isAlive) // firing
+            {
+                _fireRate = Random.Range(2f, 5f);
+                _canFire = Time.time + _fireRate;
 
-              GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
-              Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+                GameObject enemyLaser = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
-              for (int i = 0; i < lasers.Length; i++)
-              {
-                 lasers[i].ApplyEnemyLaser();
-              }
-          }
+                for (int i = 0; i < lasers.Length; i++)
+                {
+                    lasers[i].ApplyEnemyLaser();
+                }
+            }
         }
 
+        float distanceCheck = Vector3.Distance(_player.transform.position, transform.position);
+
+        if (distanceCheck <= 3.25f && !_ram) // check distance between player & enemy
+        {
+            _ram = true;
+            _speed *= 2;
+        }
+
+        if (_ram)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, Time.deltaTime);
+            transform.right -= (_player.transform.position - transform.position);
+            _rammingSpeedVisual.SetActive(true);
+        }
 
     }
     private void CalculateMovement()
     {
 
         transform.Translate(Vector3.left * _speed * Time.deltaTime);
-        
+
         PathChange();
 
         if (transform.position.x <= -13.0f || transform.position.y >= 8.14f || transform.position.y <= -6.0f)
@@ -153,12 +169,13 @@ public class Enemy : MonoBehaviour
                         other.transform.GetComponent<Player>().Damage();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
+                        Destroy(_rammingSpeedVisual.gameObject);
                         _hackVisual.SetActive(false);
                         _enemyThruster[0].SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                         _spawnManager.AddEnemyDeathCount();
-                        
+
                     }
 
                     break;
