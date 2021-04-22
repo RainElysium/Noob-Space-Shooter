@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 2f;
+    private float _speed = 3f;
 
     private Player _player;
 
@@ -18,6 +18,10 @@ public class Enemy : MonoBehaviour
     private GameObject _hackVisual, _rammingSpeedVisual;
     [SerializeField]
     private GameObject[] _enemyThruster;
+    [SerializeField]
+    private GameObject _explosionVisual;
+    [SerializeField]
+    private GameObject _artilleryZoneVisual;
 
     private float _canFire;
     private float _fireRate;
@@ -39,8 +43,13 @@ public class Enemy : MonoBehaviour
     private GameObject[] _shieldVisual;
     [SerializeField]
     private int _shieldCharges = 2;
-    private bool _isShieldActive = true;
+    private bool _isShieldActive = false;
     private bool _ram = false;
+    private int _avoidsLeft;
+    private bool _allowedToFire = true;
+    private bool _beginAvoid;
+
+    Vector3 newPos;
 
     private void Start()
     {
@@ -62,17 +71,22 @@ public class Enemy : MonoBehaviour
         _speedMultiplier = _spawnManager.GetIncreasedSpeed(); // check for increased speed at each spawn
         _speed *= _speedMultiplier;
         _shieldCharges = _shieldVisual.Length;
+        _avoidsLeft = Random.Range(1, 4); // avoids for Enemy Avoider
+        Debug.Log("Avoids started with: " + _avoidsLeft);
 
 
-        if (tag != "Enemy_Artillery")
+        if (CompareTag("Enemy"))
         {
             int rand = Random.Range(1, 101);
 
             if (rand <= 25) // 25% chance to spawn enemy shield
             {
                 _shieldVisual[0].SetActive(true);
+                _isShieldActive = true;
             }
         }
+        else if (CompareTag("Enemy_Artillery"))
+            _isShieldActive = true;
 
     }
 
@@ -103,11 +117,11 @@ public class Enemy : MonoBehaviour
             transform.Translate(_randomVector * (_speed * 2) * Time.deltaTime);
             transform.Rotate(Vector3.forward * _speed * Time.deltaTime);
         }
-        else if (tag != "Enemy_Artillery")
+        else if (!CompareTag("Enemy_Artillery"))
         {
             CalculateMovement();
 
-            if (Time.time > _canFire && _isAlive) // firing
+            if (Time.time > _canFire && _isAlive && _allowedToFire) // firing
             {
                 _fireRate = Random.Range(2f, 5f);
                 _canFire = Time.time + _fireRate;
@@ -134,14 +148,22 @@ public class Enemy : MonoBehaviour
         {
             transform.position = Vector3.MoveTowards(transform.position, _player.transform.position, Time.deltaTime);
             transform.right -= (_player.transform.position - transform.position);
+            
+            if (_rammingSpeedVisual != null)
             _rammingSpeedVisual.SetActive(true);
+            _allowedToFire = false;
         }
 
+        if (_beginAvoid)
+            AvoidMovement(newPos);
     }
     private void CalculateMovement()
     {
 
         transform.Translate(Vector3.left * _speed * Time.deltaTime);
+
+        if (_avoidsLeft >= 1)
+            AvoiderLaserCheck(); // If avoider, check distance and evade mechanics.
 
         PathChange();
 
@@ -165,16 +187,26 @@ public class Enemy : MonoBehaviour
                     {
                         _player.UpdateScore();
                         _audioSource.Play();
-                        _onEnemyDeath.SetTrigger("OnEnemyDeath");
+
+                        if (CompareTag("Enemy"))
+                            _onEnemyDeath.SetTrigger("OnEnemyDeath");
+                        else
+                            ExplosionVisual();
+
                         other.transform.GetComponent<Player>().Damage();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
                         Destroy(_rammingSpeedVisual.gameObject);
                         _hackVisual.SetActive(false);
+
+                        if (!CompareTag("Enemy"))
+                            _enemyThruster[1].SetActive(false);
+                        
                         _enemyThruster[0].SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                         _spawnManager.AddEnemyDeathCount();
+
 
                     }
 
@@ -190,48 +222,34 @@ public class Enemy : MonoBehaviour
                         _player.UpdateScore();
                         Destroy(this.gameObject, 2.8f);
                         Destroy(GetComponent<Collider2D>());
+                        Destroy(_rammingSpeedVisual.gameObject);
                         _hackVisual.SetActive(false);
                         _audioSource.Play();
-                        _onEnemyDeath.SetTrigger("OnEnemyDeath");
+
+                        if (CompareTag("Enemy"))
+                            _onEnemyDeath.SetTrigger("OnEnemyDeath");
+                        else
+                            ExplosionVisual();
+
+                        if (!CompareTag("Enemy"))
+                            _enemyThruster[1].SetActive(false);
+
                         _enemyThruster[0].SetActive(false);
                         _isAlive = false;
                         _speed = .5f;
                         _spawnManager.AddEnemyDeathCount();
+
                     }
                     break;
                 }
 
             case "Player_Laser":
                 {
-                    if (_isShieldActive)
-                    {
-                        DamageEnemyShields();
-                        Destroy(other.gameObject);
-                        break;
-                    }
-                    else
-                    {
-                        if (_player)
-                            _player.UpdateScore();
-
-                        Destroy(other.gameObject);
-                        _hackVisual.SetActive(false);
-                        _audioSource.Play();
-                        _onEnemyDeath.SetTrigger("OnEnemyDeath");
-                        Destroy(this.gameObject, 2.8f);
-                        Destroy(GetComponent<Collider2D>());
-                        _enemyThruster[0].SetActive(false);
-
-                        if (tag == "Enemy_Artillery")
-                            _enemyThruster[1].SetActive(false);
-
-                        _isAlive = false;
-                        _speed = 0;
-                        _spawnManager.AddEnemyDeathCount();
-                        break;
-                    }
+                    LaserDamage(other);
+                    break; 
                 }
-        }
+            
+            }
     }
 
     public void EnemyHacked()
@@ -396,10 +414,9 @@ public class Enemy : MonoBehaviour
         {
             --_shieldCharges;
 
-            if (tag == "Enemy_Artillery")
+            if (CompareTag("Enemy_Artillery"))
             {
                 _shieldVisual[1].SetActive(false);
-                _shieldVisual[0].SetActive(true);
             }
 
             if (_shieldCharges <= 0)
@@ -408,6 +425,94 @@ public class Enemy : MonoBehaviour
                 _shieldVisual[0].SetActive(false);
             }
         }
+    }
+
+    void LaserDamage(Collider2D other)
+        {
+
+        GameObject laserGob = other.gameObject;
+
+        _player.RemoveLaserFromList(laserGob);
+        
+        if (_isShieldActive)
+            {
+                DamageEnemyShields();
+                Destroy(other.gameObject);
+            }
+            else
+            {
+                if (_player)
+                    _player.UpdateScore();
+                if (_rammingSpeedVisual.activeInHierarchy)
+                    Destroy(_rammingSpeedVisual.gameObject);
+
+                Destroy(other.gameObject);
+
+                if (_hackVisual.activeInHierarchy)
+                    _hackVisual.SetActive(false);
+
+                _audioSource.Play();
+
+            if (CompareTag("Enemy"))
+                _onEnemyDeath.SetTrigger("OnEnemyDeath");
+            else
+                ExplosionVisual();
+
+                Destroy(this.gameObject, 1f);
+                Destroy(GetComponent<Collider2D>());
+                _enemyThruster[0].SetActive(false);
+
+                if (!CompareTag("Enemy"))
+                    _enemyThruster[1].SetActive(false);
+
+                _isAlive = false;
+                _speed = 0;
+                _spawnManager.AddEnemyDeathCount();
+
+            if (CompareTag("Enemy_Artillery"))
+            {
+                GameObject artzone = GameObject.Find("Artillery_Zone(Clone)");
+                Destroy(artzone.gameObject);
+            }
+            }
+        }    
+
+    private void AvoiderLaserCheck()
+    {
+       List<GameObject> _playerLasersActive = _player.GetPlayerLaserList();
+
+        if (CompareTag("Enemy_Avoider") && _playerLasersActive.Count > 0 && _avoidsLeft > 0)
+        {
+            for (int i = 0; i < _playerLasersActive.Count; i++)
+            {
+
+                float distance = Vector3.Distance(_playerLasersActive[i].transform.position, transform.position);
+                
+                if (distance <= 3.25f)
+                {
+                    if (_playerLasersActive[i].transform.position.y >= transform.position.y)
+                        newPos = new Vector3(transform.position.x, transform.position.y - 3f);
+                    else
+                        newPos = new Vector3(transform.position.x, transform.position.y + 3f);
+
+                    _player.RemoveLaserFromList(_playerLasersActive[i]);
+                    --_avoidsLeft;
+                    _beginAvoid = true;
+                }
+
+            }
+        }
+    }
+
+    private void AvoidMovement(Vector3 avoidTarget)
+    {
+        transform.position = Vector3.Lerp(transform.position, avoidTarget, Time.deltaTime * _speed);
+    }
+
+    void ExplosionVisual()
+    {
+        GameObject explosion = Instantiate(_explosionVisual, transform.position, Quaternion.identity);
+        Destroy(explosion.gameObject, 2.8f); // destroy after 2.8s
     }
 }
 

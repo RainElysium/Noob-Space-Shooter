@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 8
   _isEnemyLaser: 0
+  _enemyAvoider: {fileID: 4767791654533232890, guid: a661c8389dc7cb049b5838ab3f5e24a1, type: 3}
 --- !u!70 &2145172247461473502
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

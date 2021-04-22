@@ -349,9 +349,12 @@ MonoBehaviour:
   _speed: 2
   _laserPrefab: {fileID: 0}
   _hackVisual: {fileID: 448594352}
+  _rammingSpeedVisual: {fileID: 5493827578664663418, guid: 8d4cc6fe61811b145a71457860c7c112, type: 3}
   _enemyThruster:
   - {fileID: 4098952346627578607}
   - {fileID: 4098952347431746357}
+  _explosionVisual: {fileID: 8874242893412174737, guid: 9c9781d15e7264447af8b6d267cdc2cf, type: 3}
+  _artilleryZoneVisual: {fileID: 4436470757160122435, guid: 8d198b6172604834e91f237d8f1a7512, type: 3}
   _pathGenerator: 0
   _shieldVisual:
   - {fileID: 4098952347065996171}
@@ -503,7 +506,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4098952347065996169
 Transform:
   m_ObjectHideFlags: 0

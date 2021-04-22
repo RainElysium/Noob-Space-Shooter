@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyArtillery;
     [SerializeField]
+    private GameObject _enemyAvoider;
+    [SerializeField]
     private GameObject[] _powerups;
     [SerializeField]
     private GameObject _enemyContainer;
@@ -24,7 +26,6 @@ public class SpawnManager : MonoBehaviour
     private int _waveNumber = 1;
     private int _spawnRate;
     private float _spawnInterval;
-    //private float _spawnInterval = 3.0f;
     private float _increasedSpeed = .25f;
 
     private void Start()
@@ -74,25 +75,24 @@ public class SpawnManager : MonoBehaviour
                 GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
 
-                if (_waveNumber >= 2) // only spawn 1 max in wave 2, unlimited in future waves
+                if (_waveNumber >= 2) // only spawn 1 max
                 {
-                    if (_waveNumber == 2)
+                    int rand = Random.Range(1, 100);
+                    if (rand <= 30)
                     {
-                        int rand = Random.Range(1, 100);
-                        if (rand >= 50)
-                        {
-                            if (_waveNumber == 2)
-                            {
-                                GameObject findExisting = GameObject.Find("EnemyArtillery");
-                                if (!findExisting)
-                                    Instantiate(_enemyArtillery, posToSpawn, Quaternion.identity);
-                            }
-                            else
-                                Instantiate(_enemyArtillery, posToSpawn, Quaternion.identity);
-                        }
+                        Vector3 posToSpawn2 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                        GameObject findExisting = GameObject.Find("EnemyArtillery(Clone)");
+                         if (!findExisting)
+                             Instantiate(_enemyArtillery, posToSpawn2, Quaternion.identity);
                     }
-
                 }
+
+                 int randCheck = Random.Range(1, 100);
+
+                Vector3 posToSpawn3 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                if (randCheck <= 30)
+                   Instantiate(_enemyAvoider, posToSpawn3, Quaternion.identity);
+    
                 yield return new WaitForSeconds(3.0f);
             }
         }

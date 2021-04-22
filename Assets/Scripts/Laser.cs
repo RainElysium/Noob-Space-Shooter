@@ -10,6 +10,8 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private bool _isEnemyLaser = false;
 
+    private Player _player;
+
     // Update is called once per frame
     void Update()
     {
@@ -19,12 +21,19 @@ public class Laser : MonoBehaviour
             MoveRight();
     }
 
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
     private void MoveRight()
     {
         transform.Translate(Vector3.right * _speed * Time.deltaTime);
 
         if (transform.position.x > 10.5f)
         {
+            _player.RemoveLaserFromList(this.gameObject); // must be removed from array tracking player lasers
+
             if (transform.parent)
                 Destroy(transform.parent.gameObject);
 

@@ -41,6 +41,9 @@ public class Player : MonoBehaviour
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
 
+    [SerializeField]
+    private List<GameObject> _playerLaserList;
+
     private bool _isTripleShotActive = false;
     private bool _isShieldActive = false;
     private bool _isHackShotActive = false;
@@ -130,9 +133,11 @@ public class Player : MonoBehaviour
 
         if (!_isHackShotActive && !_isTripleShotActive) // FIRE REGULAR LASERS!
         {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0.853f, 0, 0), Quaternion.identity);
+            GameObject newLaser = Instantiate(_laserPrefab, transform.position + new Vector3(0.853f, 0, 0), Quaternion.identity);
             --_ammoCount;
             _uiManager.UpdateAmmo(_ammoCount);
+            _playerLaserList.Add(newLaser);
+            
         }
 
         if (_isHackShotActive && !_isTripleShotActive && _hackShotCount > 0) // FIRE HACKS!
@@ -152,8 +157,6 @@ public class Player : MonoBehaviour
             _canFire = Time.time + _fireRate;
             _audioSource.clip = _laserSoundClip;
             _audioSource.Play();
-
-
     }
 
     public void Damage()
@@ -322,6 +325,16 @@ public class Player : MonoBehaviour
         Damage();
         _speed /= 2; // half speed
         StartCoroutine(SpeedBoostPowerDownRoutine()); // restore speed after 5s
+    }
+
+    public void RemoveLaserFromList(GameObject laser)
+    {
+        _playerLaserList.Remove(laser);
+    }
+
+    public List<GameObject> GetPlayerLaserList()
+    {
+        return _playerLaserList;
     }
 }
 

@@ -53,7 +53,6 @@ public class Artillery : MonoBehaviour
         yield return new WaitForSeconds(1.25f);
         GameObject explosion = Instantiate(_explosion, zone.transform.position, Quaternion.identity);
         Destroy(zone.gameObject);
-        yield return new WaitForSeconds(2f);
-        Destroy(explosion.gameObject);
+        Destroy(explosion.gameObject, 2.8f);
     }
 }
