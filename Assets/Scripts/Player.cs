@@ -85,7 +85,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && !_isThrustersActive) // Thrusters engage!
         {
             _speed *= _thrusterMultiplier;
-            _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.35f, 0);
+            _thrusterVisual.transform.localScale = new Vector3(1.92f, 0.98f, 0);
             _isThrustersActive = true;
             _thrusterAudioSource.clip = _thrusterClip;
             _thrusterAudioSource.Play();
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 direction = new Vector3(verticalInput, horizontalInput, 0);
+        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
@@ -317,7 +317,7 @@ public class Player : MonoBehaviour
     public void PowerDownThrusters()
     {
         _speed = 5f;
-        _thrusterVisual.transform.localScale = new Vector3(0.15f, 0.15f, 0);
+        _thrusterVisual.transform.localScale = new Vector3(0.957f, 0.971f, 0);
     }
 
     public void AsteroidImpact()

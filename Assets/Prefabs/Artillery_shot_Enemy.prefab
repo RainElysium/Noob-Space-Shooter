@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4573479789464092323}
   - component: {fileID: 4573479789464092322}
-  - component: {fileID: -6720881144858245735}
   - component: {fileID: -1284224928086665059}
   - component: {fileID: 5301867436216289517}
+  - component: {fileID: 5761687779350346949}
   m_Layer: 0
-  m_Name: Artillery_shot
+  m_Name: Artillery_shot_Enemy
   m_TagString: Artillery_Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,18 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6720881144858245735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4573479789464092324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f72ced04f96f8845b01f8d80cdf6e59, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!70 &-1284224928086665059
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -134,3 +122,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5761687779350346949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4573479789464092324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f72ced04f96f8845b01f8d80cdf6e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _explosion: {fileID: 8874242893412174737, guid: 9c9781d15e7264447af8b6d267cdc2cf, type: 3}

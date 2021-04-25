@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
     public Text _RestartR;
     [SerializeField]
     private Text _waveText;
+    [SerializeField]
+    private Text _winnerText;
 
     public int _score;
     private GameManager _gameManager;
@@ -31,6 +33,7 @@ public class UIManager : MonoBehaviour
     private SpawnManager _spawnManager;
 
     private bool _stopAmmoFlash = false;
+    private bool _winner = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +53,13 @@ public class UIManager : MonoBehaviour
             Debug.LogError("Player is NULL.");
 
     }
-    // Update is called once per frame
+
+    private void Update()
+    {
+        if (_winner)
+            GameOverSequence();
+    }
+
     public void UpdateScore(int score)
     {
         _scoreText.text = "Score: " + score;
@@ -85,9 +94,18 @@ public class UIManager : MonoBehaviour
 
     void GameOverSequence()
     {
-        StartCoroutine(GameOverFlickerRoutine());
-        _RestartR.gameObject.SetActive(true);
-        _gameManager.GameOver();
+        if (_winner)
+        {
+            _winnerText.gameObject.SetActive(true);
+            _RestartR.gameObject.SetActive(true);
+            _gameManager.GameOver();
+        }
+        else
+        {
+            StartCoroutine(GameOverFlickerRoutine());
+            _RestartR.gameObject.SetActive(true);
+            _gameManager.GameOver();
+        }
     }
 
     IEnumerator GameOverFlickerRoutine()
@@ -164,5 +182,10 @@ public class UIManager : MonoBehaviour
             _waveText.color = new Color(_waveText.color.r, _waveText.color.g, _waveText.color.b, _waveText.color.a - (Time.deltaTime / 5));
             yield return null;
         }
+    }
+
+    public void PlayerWon()
+    {
+        _winner = true;
     }
 }

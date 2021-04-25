@@ -36,13 +36,12 @@ public class Artillery : MonoBehaviour
         }
     }
 
-    void ArtilleryFire()
+    public void ArtilleryFire()
     {
         Vector3 playerPOS = _player.transform.position;
 
         _artZone = Instantiate(_artilleryZone, playerPOS, Quaternion.identity); // Drop artillery zone
         StartCoroutine(ArtilleryZoneTimerRoutine(_artZone));
-
     }
 
     IEnumerator ArtilleryZoneTimerRoutine(GameObject zone)
@@ -50,9 +49,14 @@ public class Artillery : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Vector3 laserPos = new Vector3(-1.97f, 0, 0);
         GameObject artilleryShot = Instantiate(_artilleryShot, transform.position + laserPos, Quaternion.identity); // Laser creation
-        yield return new WaitForSeconds(1.25f);
+        yield return new WaitForSeconds(1.10f);
         GameObject explosion = Instantiate(_explosion, zone.transform.position, Quaternion.identity);
-        Destroy(zone.gameObject);
         Destroy(explosion.gameObject, 2.8f);
+        Destroy(zone.gameObject, 2f);
+    }
+
+    public GameObject GetTarget()
+    {
+        return _artZone;
     }
 }

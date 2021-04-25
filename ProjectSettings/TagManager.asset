@@ -12,6 +12,14 @@ TagManager:
   - Enemy_Artillery
   - Artillery_Shot
   - Enemy_Avoider
+  - Boss_Inner_Top
+  - Boss_Outter_Top
+  - Boss_Inner_Bottom
+  - Boss_Outter_Bottom
+  - Boss
+  - Boss_Regular_Laser
+  - Boss_Artillery
+  - Artillery_Zone
   layers:
   - Default
   - TransparentFX

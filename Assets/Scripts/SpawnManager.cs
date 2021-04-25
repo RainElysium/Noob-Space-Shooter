@@ -11,6 +11,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyAvoider;
     [SerializeField]
+    private GameObject _boss;
+    [SerializeField]
     private GameObject[] _powerups;
     [SerializeField]
     private GameObject _enemyContainer;
@@ -19,6 +21,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private int _randomPowerUp;
 
+    private bool _stopSpawningEnemies = false;
     private bool _stopSpawning = false;
     [SerializeField]
     private int _enemyCount = 10;
@@ -59,41 +62,44 @@ public class SpawnManager : MonoBehaviour
         }
         else
             _spawnInterval = 2f;
+
+        if (!_stopSpawningEnemies && _waveNumber == 3)
+        {
+            SpawnBoss();
+        }
     }
 
     IEnumerator SpawnEnemyRoutine()
     {
-
         yield return new WaitForSeconds(_spawnInterval);
 
-        while (!_stopSpawning)
+        while (!_stopSpawningEnemies)
         {
-            for (int i = 0; i < _waveNumber; i++)
-            {
-                yield return new WaitForSeconds(1.5f);
-                Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
-                GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _enemyContainer.transform;
-
-                if (_waveNumber >= 2) // only spawn 1 max
+                for (int i = 0; i < _waveNumber; i++)
                 {
-                    int rand = Random.Range(1, 100);
-                    if (rand <= 30)
+                    yield return new WaitForSeconds(1.5f);
+                    Vector3 posToSpawn = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                    GameObject newEnemy = Instantiate(_enemyPrefab, posToSpawn, Quaternion.identity);
+                    newEnemy.transform.parent = _enemyContainer.transform;
+
+                    if (_waveNumber == 2) // only spawn 1 max
                     {
-                        Vector3 posToSpawn2 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
-                        GameObject findExisting = GameObject.Find("EnemyArtillery(Clone)");
-                         if (!findExisting)
-                             Instantiate(_enemyArtillery, posToSpawn2, Quaternion.identity);
+                        int rand = Random.Range(1, 100);
+                        if (rand <= 30)
+                        {
+                            Vector3 posToSpawn2 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                            GameObject findExisting = GameObject.Find("EnemyArtillery(Clone)");
+                            if (!findExisting)
+                                Instantiate(_enemyArtillery, posToSpawn2, Quaternion.identity);
+                        }
                     }
-                }
+                    int randCheck = Random.Range(1, 100);
 
-                 int randCheck = Random.Range(1, 100);
+                    Vector3 posToSpawn3 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
+                    if (randCheck <= 30)
+                        Instantiate(_enemyAvoider, posToSpawn3, Quaternion.identity);
 
-                Vector3 posToSpawn3 = new Vector3(10.45f, Random.Range(-4.53f, 6.2f), 0);
-                if (randCheck <= 30)
-                   Instantiate(_enemyAvoider, posToSpawn3, Quaternion.identity);
-    
-                yield return new WaitForSeconds(3.0f);
+                    yield return new WaitForSeconds(3.0f);
             }
         }
     }
@@ -167,12 +173,18 @@ public class SpawnManager : MonoBehaviour
 
     public int WaveNumber()
     {
-        Debug.Log("WaveNumber returned: " + _waveNumber);
         return _waveNumber;
     }
 
     public float GetIncreasedSpeed()
     {
         return _increasedSpeed;
+    }
+
+    void SpawnBoss()
+    {
+        StopCoroutine(SpawnEnemyRoutine());
+        _stopSpawningEnemies = true;
+        Instantiate(_boss, new Vector3(10.63f, 4.25f, 0f), Quaternion.identity);
     }
 }

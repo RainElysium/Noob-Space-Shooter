@@ -20,8 +20,6 @@ public class Enemy : MonoBehaviour
     private GameObject[] _enemyThruster;
     [SerializeField]
     private GameObject _explosionVisual;
-    [SerializeField]
-    private GameObject _artilleryZoneVisual;
 
     private float _canFire;
     private float _fireRate;
@@ -72,8 +70,6 @@ public class Enemy : MonoBehaviour
         _speed *= _speedMultiplier;
         _shieldCharges = _shieldVisual.Length;
         _avoidsLeft = Random.Range(1, 4); // avoids for Enemy Avoider
-        Debug.Log("Avoids started with: " + _avoidsLeft);
-
 
         if (CompareTag("Enemy"))
         {
@@ -485,19 +481,21 @@ public class Enemy : MonoBehaviour
         {
             for (int i = 0; i < _playerLasersActive.Count; i++)
             {
-
-                float distance = Vector3.Distance(_playerLasersActive[i].transform.position, transform.position);
-                
-                if (distance <= 3.25f)
+                if (_playerLasersActive[i] != null)
                 {
-                    if (_playerLasersActive[i].transform.position.y >= transform.position.y)
-                        newPos = new Vector3(transform.position.x, transform.position.y - 3f);
-                    else
-                        newPos = new Vector3(transform.position.x, transform.position.y + 3f);
+                    float distance = Vector3.Distance(_playerLasersActive[i].transform.position, transform.position);
 
-                    _player.RemoveLaserFromList(_playerLasersActive[i]);
-                    --_avoidsLeft;
-                    _beginAvoid = true;
+                    if (distance <= 3.25f)
+                    {
+                        if (_playerLasersActive[i].transform.position.y >= transform.position.y)
+                            newPos = new Vector3(transform.position.x, transform.position.y - 3f);
+                        else
+                            newPos = new Vector3(transform.position.x, transform.position.y + 3f);
+
+                        _player.RemoveLaserFromList(_playerLasersActive[i]);
+                        --_avoidsLeft;
+                        _beginAvoid = true;
+                    }
                 }
 
             }

@@ -39,9 +39,8 @@ public class HackShot : MonoBehaviour
         if (_target && other.gameObject != _target)
             return;
 
-        if (other.CompareTag("Enemy"))
-        {
+        if (other.CompareTag("Enemy") || other.CompareTag("Enemy_Avoider"))
             _target = other.gameObject;
-        }
+        
     }
 }

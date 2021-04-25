@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 2024940365}
   - component: {fileID: 2024940364}
   m_Layer: 0
-  m_Name: Thruster
+  m_Name: Enemy_Thruster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -417,6 +417,8 @@ MonoBehaviour:
   _rammingSpeedVisual: {fileID: 5493827577797291539}
   _enemyThruster:
   - {fileID: 2024940362}
+  _explosionVisual: {fileID: 0}
+  _artilleryZoneVisual: {fileID: 0}
   _pathGenerator: 0
   _shieldVisual:
   - {fileID: 210305458}
