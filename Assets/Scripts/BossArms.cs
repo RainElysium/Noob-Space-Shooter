@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossArms : MonoBehaviour
 {
-    private int _health = 1;
+    private int _health = 5;
     [SerializeField]
     private GameObject _fire, _explosion;
     private Boss _boss;
@@ -38,7 +38,7 @@ public class BossArms : MonoBehaviour
 
         if (_health == 0)
         {
-            GameObject explosionVisual = Instantiate(_explosion, _fire.transform.position/* + new Vector3(-.20f, 0f, 0f)*/, Quaternion.identity);
+            GameObject explosionVisual = Instantiate(_explosion, _fire.transform.position, Quaternion.identity);
             _fire.SetActive(false);
             Destroy(this.gameObject);
             Destroy(explosionVisual.gameObject, 2.5f);

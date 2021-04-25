@@ -124,8 +124,6 @@ public class Boss : MonoBehaviour
     {
         for (int i = 0; i < laserCount; ++i)
         {
-            Debug.Log("_firingMechanics.Count = " + _firingMechanisms.Count);
-
             if (_firingMechanisms[i] != null)
             {
                 GameObject laser = Instantiate(_firingMechanisms[i], transform.position, Quaternion.identity, gameObject.transform);
@@ -195,7 +193,6 @@ public class Boss : MonoBehaviour
 
     IEnumerator CheckPositionForMovement()
     {
-        Debug.Log("CheckPositionForMovement()");
         yield return new WaitForSeconds(5f);
         _canMove = true;
         _doOnce = true;
@@ -228,8 +225,6 @@ public class Boss : MonoBehaviour
     }
     public void DestroyArmCount(int armNumber)
     {
-        Debug.Log("armNumber: " + armNumber);
-
         if (_deadArmsCount != 4)
             _firingMechanisms[armNumber] = null;
 
@@ -298,7 +293,6 @@ public class Boss : MonoBehaviour
         for (int i = 0; i < _explosionPoints.Count; i++)
         {
             yield return new WaitForSeconds(.5f);
-            Debug.Log("i = " + i);
             GameObject explosion = Instantiate(_explosion, _explosionPoints[i].transform.position, Quaternion.identity);
             Destroy(explosion, 2f);
 
