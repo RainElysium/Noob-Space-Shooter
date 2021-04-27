@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -288.9, y: -34.6}
+  m_AnchoredPosition: {x: -287.9, y: -45.7}
   m_SizeDelta: {x: 199.1216, y: 32.884}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &348585433
@@ -459,7 +459,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642486383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -18.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -490,8 +490,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1224624811}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -399.91, y: -224.21, z: 0}
-  m_LocalScale: {x: 0.39711675, y: 0.39711675, z: 0.39711675}
+  m_LocalPosition: {x: -400.0177, y: -224.6528, z: 0}
+  m_LocalScale: {x: 0.41391477, y: 0.41868016, z: 0.39711675}
   m_Children: []
   m_Father: {fileID: 1670440679}
   m_RootOrder: 4
@@ -977,7 +977,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Created By: Ryan Allatt \nWith Help From: Your Mom"
+  m_Text: "Created By: Ryan Allatt \nArt Design By: Benjamin Montalbano\nWith Help
+    From: Your Mom"
 --- !u!222 &1837042976
 CanvasRenderer:
   m_ObjectHideFlags: 0

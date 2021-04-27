@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         _activeScene = SceneManager.GetActiveScene().buildIndex;
 
         if (Input.GetKeyDown(KeyCode.R) && _isGameOver)
-            SceneManager.LoadScene(1); // Current game scene
+            SceneManager.LoadScene(2); // Current game scene
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
             else
                 Application.Quit();
         }
+
+        if (_activeScene == 1 && Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene(2);
+        }
+
     }
 
     public void GameOver()
